@@ -1,0 +1,4 @@
+- insert:
+    - id: prompt-library
+      name: dsh-prompt-library
+      config: {}

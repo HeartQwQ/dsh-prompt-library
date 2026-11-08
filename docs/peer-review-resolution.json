@@ -1,0 +1,355 @@
+{
+  "reviewer": "本地agy / gemini-4-argon-high",
+  "reviewedIds": [
+    "dsh-coding-root-cause",
+    "dsh-coding-regression",
+    "dsh-coding-pr-review",
+    "dsh-coding-safe-refactor",
+    "dsh-coding-race-condition",
+    "dsh-coding-slow-request",
+    "dsh-coding-memory-growth",
+    "dsh-coding-api-failure",
+    "dsh-coding-input-decoding",
+    "dsh-coding-db-migration",
+    "dsh-coding-query-plan",
+    "dsh-coding-cancel-work",
+    "dsh-coding-cache-invalidation",
+    "dsh-coding-incident-triage",
+    "dsh-coding-dependency-upgrade",
+    "dsh-coding-coverage-matrix",
+    "dsh-coding-save-conflict",
+    "dsh-coding-release-evidence",
+    "dsh-product-clarify-requirements",
+    "dsh-product-prd",
+    "dsh-product-mvp-cut",
+    "dsh-product-user-interview",
+    "dsh-product-project-plan",
+    "dsh-product-risk-register",
+    "dsh-product-acceptance",
+    "dsh-product-vendor-review",
+    "dsh-analysis-research-brief",
+    "dsh-analysis-document-compare",
+    "dsh-analysis-claim-check",
+    "dsh-analysis-paper-review",
+    "dsh-analysis-dataset-audit",
+    "dsh-analysis-metrics",
+    "dsh-analysis-decision-memo",
+    "dsh-analysis-source-synthesis",
+    "dsh-writing-document-outline",
+    "dsh-writing-technical-guide",
+    "dsh-writing-rfc",
+    "dsh-writing-edit-clear",
+    "openai-writing-document-summary",
+    "dsh-writing-reader-test",
+    "dsh-writing-release-notes",
+    "dsh-writing-localization",
+    "dsh-general-meeting-actions",
+    "dsh-general-weekly-update",
+    "dsh-general-professional-email",
+    "dsh-general-learning-plan",
+    "dsh-general-explain-concept",
+    "dsh-general-work-priorities"
+  ],
+  "findings": [
+    {
+      "id": "dsh-coding-root-cause",
+      "severity": "medium",
+      "problem": "边界两句重复（'日志不足时先列最关键的缺口，不把猜测当结论'与尾部模板句重复）；'只根据提供的信息下结论'易阻断基于经验提出候选假设；缺复现步骤时仍硬性要求输出'复现与验证步骤'。example 第1栏把'刚升级依赖'（属第3栏）混入日志且无真实报错内容。",
+      "replacementSuggestion": "边界改为：'缺失日志或复现时先列关键缺口，不把猜测当结论；基于输入提出候选假设须标明依据与待验证项。' 输出补'复现步骤未提供时输出最小复现实验'。example 第1栏改写报错摘要/状态码，第3栏填依赖版本变更。"
+    },
+    {
+      "id": "dsh-coding-regression",
+      "severity": "medium",
+      "problem": "输入无测试框架与文件位置字段，却要求输出'必要夹具和运行入口'，缺载体时易诱导编造命令；'在哪个断言失败'未明确指向'修复前旧代码'；example 第1栏填的是测试目标而非缺陷描述。",
+      "replacementSuggestion": "做法改为'说明在未修复旧代码上应在哪个断言失败'；边界补'未提供测试框架或入口时，只给用例设计与伪代码断言，运行入口标待补'。example 缺陷描述改为'连点提交按钮会向订单表插入两条相同记录'。"
+    },
+    {
+      "id": "dsh-coding-pr-review",
+      "severity": "high",
+      "problem": "做法要求'沿输入和调用方检查行为变化'，但输入常仅有 diff 片段而无调用方代码，边界未明确跨文件影响怎么处理；缺少未发现高风险缺陷时的输出规范；example 改动内容填成了任务指令而非代码或 diff。",
+      "replacementSuggestion": "做法改为'沿输入及已知调用方检查变更；调用方未提供时单列跨边界待核实点；未见高风险缺陷则说明已审查范围与盲区'。example 改动内容放入具体 diff 或代码片段。"
+    },
+    {
+      "id": "dsh-coding-safe-refactor",
+      "severity": "high",
+      "problem": "做法承诺'指出每步如何证明行为不变'属无依据承诺——缺少完整调用方和回归基线时只能验证已知契约，无法证明隐式副作用不变；example 把重构目标误填进了当前实现。",
+      "replacementSuggestion": "做法改为'给出每步的等价验证手段，并标出未覆盖的隐式副作用（如异常类型、日志、时序）'。example 当前实现放两处重复请求解析代码摘要，重构目标写'抽成公共函数且保持外部签名不变'。"
+    },
+    {
+      "id": "dsh-coding-race-condition",
+      "severity": "medium",
+      "problem": "做法窄化为'构造旧响应晚于新响应的顺序'，遗漏读-改-写覆盖、并发重复触发、组件销毁后回调等竞态；example 把错误现象误填入异步流程。",
+      "replacementSuggestion": "做法改为'按时间线列并发任务与共享状态写入；构造乱序完成、并发写或生命周期交错；比较取消、版本号与幂等保护'。example 异步流程填'input触发请求→无AbortController→回调直接覆盖results状态'。"
+    },
+    {
+      "id": "dsh-coding-slow-request",
+      "severity": "medium",
+      "problem": "缺少分段耗时或 trace 时，'瓶颈候选'易流于空泛猜想；example 调用链与指标只有聚合指标变化，缺失调用链信息。",
+      "replacementSuggestion": "边界补'未提供分段耗时或trace时，只列必须采集的观测点与对照实验，不把猜测当已确认瓶颈'。example 第1栏补调用链节点如'网关→鉴权→订单SQL→风控RPC；P95从200ms升至2s'。"
+    },
+    {
+      "id": "dsh-coding-memory-growth",
+      "severity": "medium",
+      "problem": "未要求输入指标口径（RSS vs Heap Live）及语言/GC 机制，在带 GC 或分配器缓存页未归还 OS 时极易将正常内存保留误判为泄漏；example 仅为现象描述无记录。",
+      "replacementSuggestion": "输入或边界明确要求标注'运行时/GC与指标口径（RSS/Heap）'，未提供堆采样时只给采样方案不直接定性为泄漏。example 阶段内存记录填各时间点 RSS 与堆内存数值。"
+    },
+    {
+      "id": "dsh-coding-api-failure",
+      "severity": "medium",
+      "problem": "做法未要求核查契约是否已提供幂等键或结果查询端点——若服务端不支持幂等，任何自动重试边界都不成立；example 把故障场景误填入接口契约。",
+      "replacementSuggestion": "做法补'先核对契约是否支持幂等键或状态查询；若缺失，明确标出重试依赖的新增前置设计'。example 接口契约改为'POST /orders，请求无幂等键，3s超时返回504'。"
+    },
+    {
+      "id": "dsh-coding-input-decoding",
+      "severity": "high",
+      "problem": "任务名为'审查边界数据解码'，但输入完全没有'现有解码代码'字段，无法实施审查；做法遗漏空字符串、精度丢失（大数/浮点）与超深/超大载荷边界；example 是文字规则而非输入样例。",
+      "replacementSuggestion": "若偏设计规则将任务改为'设计边界数据解码'；若为代码审查则在输入补'现有解码实现'；做法补'空串、精度丢失与载荷上限'。example 输入样例给真实 JSON 如 '{\"amount\":\"12.50\",\"extra\":1}'。"
+    },
+    {
+      "id": "dsh-coding-db-migration",
+      "severity": "high",
+      "problem": "缺少数据库引擎与版本输入（MySQL 5.7/8.0、PostgreSQL、SQLite 的锁表与在线 DDL 行为截然不同），没有引擎信息就分析锁风险缺乏依据；'不直接执行迁移'略多余；example 第1栏无表结构且混入了可用性约束。",
+      "replacementSuggestion": "在输入中要求注明'数据库类型与版本'，缺失时锁风险须标待按实际库核实；边界改为'只输出方案与SQL草案，不可逆操作单列警示'。example 第1栏给出表结构与目标字段，停机限制移至第3栏。"
+    },
+    {
+      "id": "dsh-coding-query-plan",
+      "severity": "high",
+      "problem": "做法未区分预估计划（EXPLAIN）与实测计划（EXPLAIN ANALYZE），无实际行数耗时时无法判断估算偏差；边界'缺执行计划就先索取'未收敛后续输出动作；example 违背自身边界未提供 SQL 与执行计划。",
+      "replacementSuggestion": "边界改为'未附SQL或实测执行计划时停止给出索引定论，只列所需EXPLAIN ANALYZE命令与排查假设'。example 第1栏提供脱敏 SQL 与简化执行计划。"
+    },
+    {
+      "id": "dsh-coding-cancel-work",
+      "severity": "medium",
+      "problem": "输出硬性要求'取消状态机'对简单任务属过度流程；做法遗漏'重复取消'及'完成瞬间收到取消'的并发竞态与超时兜底；example 把现象填入任务流程。",
+      "replacementSuggestion": "输出'取消状态机'改为'取消状态流转'；做法补'处理重复取消与完成并发竞态，明确超时兜底'。example 任务流程列出'发起导出→分批查库→写入临时文件→上传返回'。"
+    },
+    {
+      "id": "dsh-coding-cache-invalidation",
+      "severity": "medium",
+      "problem": "输入与做法未区分本地内存缓存与分布式共享缓存，也遗漏了写库与失效并发导致旧值回写、失效失败兜底等关键竞态；example 把现象填入缓存对象。",
+      "replacementSuggestion": "做法补'区分单机与多实例缓存形态，排查写后失效并发覆写窗口及失效失败补偿（如版本键/短TTL）'。example 缓存对象填'个人资料缓存（key=profile:{uid}，前端内存+Redis）'。"
+    },
+    {
+      "id": "dsh-coding-incident-triage",
+      "severity": "medium",
+      "problem": "故障应急中'止血/回滚恢复'往往优先于深挖根因，但输出只要求'排查清单'，缺少显式的止血/回滚触发点；边界'不先杀未知进程或删除锁文件'过窄；example 无时间线。",
+      "replacementSuggestion": "输出补'止血/回滚决策点'；边界改为'破坏性或不可逆恢复动作前，必须先确认影响、留存现场并准备回退'。example 症状与时间线补时间顺序与变化事件。"
+    },
+    {
+      "id": "dsh-coding-dependency-upgrade",
+      "severity": "high",
+      "problem": "做法要求'核对官方迁移说明、engine和peer兼容'，但输入没有提供迁移文档或 manifest 的位置，离线模型极易编造变更；边界与尾句重复；example 第1栏完全没有版本号。",
+      "replacementSuggestion": "将第1输入改为'版本与迁移资料（含包名、起止版本及manifest/changelog摘要）'；合并边界为'未附官方迁移说明且无法查证时，破坏性变更与peer兼容一律标待核实'。example 填具体包名和起止版本。"
+    },
+    {
+      "id": "dsh-coding-coverage-matrix",
+      "severity": "low",
+      "problem": "做法默认存在'生产冒烟'层，对桌面端/内部工具或上线前验证并不通用；边界'不要为数量重复运行同一种检查'表述含糊。",
+      "replacementSuggestion": "做法改为'按风险分层对应单元/Mock、真实集成与发布后冒烟（按适用环境）'；边界改为'不堆砌低价值同质检查，高风险变更须对应真实路径验证'。"
+    },
+    {
+      "id": "dsh-coding-save-conflict",
+      "severity": "medium",
+      "problem": "仅覆盖单人保存期间继续编辑，遗漏服务端被他人修改引起的并发版本冲突（如409）及未保存草稿切换/离开处理；example 把冲突要求填成了表单状态。",
+      "replacementSuggestion": "做法补'推演服务端版本冲突合并策略及未保存草稿在切页/关闭时的保护'。example 表单状态改为'已确认基线A、本地未保存修改B、进行中保存请求A'。"
+    },
+    {
+      "id": "dsh-coding-release-evidence",
+      "severity": "high",
+      "problem": "做法未要求核对'测试日志产出时间/commit 与最后代码改动是否匹配'，极易放过'测完又改代码'的失效证据；example 把检查原始结果填进了需求清单。",
+      "replacementSuggestion": "做法补'核验检查结果对应的commit/时间戳晚于最后改动，旧结果视为失效'。example 需求清单改为'1.真实登录改造 2.桌面端打包交付'，把单测与验证状态移入第3栏。"
+    },
+    {
+      "id": "dsh-product-clarify-requirements",
+      "severity": "low",
+      "problem": "输出同时包含'关键问题'与'验收例'，但未要求标明哪些验收例依赖尚未解决的关键问题，易被误当作定稿验收标准。",
+      "replacementSuggestion": "输出'验收例'改为'初步验收例（标明所依赖的待定假设，关键问题确认后更新）'。"
+    },
+    {
+      "id": "dsh-product-prd",
+      "severity": "medium",
+      "problem": "若输入仅为早期想法或缺少埋点口径，要求输出'可交给开发的PRD，附成功指标'容易迫使模型脑补交互与虚构量化指标；example 仅是一句话想法而非 PRD 素材。",
+      "replacementSuggestion": "边界补'未定规则或缺失指标口径时在PRD中标阻塞待定项，不代编指标数值与未确认流程'。example 需求与资料放已有背景、角色场景与功能要点。"
+    },
+    {
+      "id": "dsh-product-mvp-cut",
+      "severity": "medium",
+      "problem": "边界'不把高风险依赖隐藏到后续阶段'表达晦涩；example 将时间约束与裁剪结果混填入候选功能，缺少完整候选列表。",
+      "replacementSuggestion": "边界改为'延后某功能时必须显式说明其对首版数据结构或架构造成的返工与验证风险'。example 候选功能列出全部备选功能项，'两周'移至第3栏。"
+    },
+    {
+      "id": "dsh-product-user-interview",
+      "severity": "medium",
+      "problem": "输出写'证据记录'容易误导，设计提纲阶段只能产出会中使用的'记录模板'；输入缺访谈时长/场景限制，提纲容易过度发散。",
+      "replacementSuggestion": "输出'证据记录'改为'证据记录表模板'；输入受访者或研究问题补充'访谈时长与形式（如30分钟半结构化）'。"
+    },
+    {
+      "id": "dsh-product-project-plan",
+      "severity": "medium",
+      "problem": "边界与尾句语义重复；未输入人力产能与工时评估时，里程碑和关键路径无法得出真实日历时间；example 把截止时间与外部依赖填进了交付目标。",
+      "replacementSuggestion": "合并边界为'未提供工时与人手数据时按阶段依赖序（T+N/前置条件）编排，缺日期和负责人一律标待定'。example 交付目标写清上线系统能力与验收口径。"
+    },
+    {
+      "id": "dsh-product-risk-register",
+      "severity": "medium",
+      "problem": "做法要求区分'风险与已发生问题'，但输出漏了'已发生问题'项；排序维度缺定性可能性/紧迫度；输入未提供负责人时输出仍要求'责任'。",
+      "replacementSuggestion": "做法改为'按影响、定性可能性与可发现性排序'；输出增加'已发生阻塞（如有）'并注明无负责人输入时责任栏标待定。"
+    },
+    {
+      "id": "dsh-product-acceptance",
+      "severity": "low",
+      "problem": "body 整体简洁清晰，仅做法'核对前提和可重复数据'略偏测试实施层；example 第1栏仅给了单条异常约束而非完整业务流程。",
+      "replacementSuggestion": "做法微调为'明确前置状态与用户可观察输入输出'；example 需求与流程补全触发生成、切换会话与返回会话后的展示规则。"
+    },
+    {
+      "id": "dsh-product-vendor-review",
+      "severity": "medium",
+      "problem": "边界与尾句语义重复；输出缺少最终准入结论（通过/有条件试用/淘汰门槛）；example 把比较指令填进了提案内容。",
+      "replacementSuggestion": "合并边界为'无实测或官方材料证明的价格、合规与能力一律标未核实'；输出增加'试用准入结论与一票否决项'。example 提案内容放入两款工具的权限与导出能力摘要。"
+    },
+    {
+      "id": "dsh-analysis-research-brief",
+      "severity": "medium",
+      "problem": "输入无调研时限或深度约束，却要求制定'停止搜集的条件'，使停止阈值缺乏现实锚点。",
+      "replacementSuggestion": "输入决策用途补充'调研时限与充分度要求'，并在输出判断标准中关联该时限给出停止搜集条件。"
+    },
+    {
+      "id": "dsh-analysis-document-compare",
+      "severity": "medium",
+      "problem": "做法'仅在指定维度建立逐项对应'缺乏未指定维度或发现维度外致命冲突时的兜底；边界与尾句重复；example 把比较维度填进了资料内容。",
+      "replacementSuggestion": "做法改为'优先按指定维度对照（未指定时从决策目标提炼），发现维度外关键冲突单列提醒'；合并边界。example 资料内容放入 A/B 方案要点文本。"
+    },
+    {
+      "id": "dsh-analysis-claim-check",
+      "severity": "low",
+      "problem": "边界与尾句重复；'可信程度'未约定判断标尺，输出容易主观飘忽。",
+      "replacementSuggestion": "输出'可信程度'约定简要分级（如：充分支持/部分支持/证据不足/存在反证）；合并边界'无法核验外部来源时明确标未核查，不编造引用'。"
+    },
+    {
+      "id": "dsh-analysis-paper-review",
+      "severity": "medium",
+      "problem": "未说明输入仅含摘要/片段时的降级策略——缺实验表格与设置时无法验证'结论是否由结果支持'；example 把任务指令填入论文内容。",
+      "replacementSuggestion": "边界补'仅提供摘要或片段时，对基线公平性与实验支持度直接标无法核验'。example 论文内容填入含问题、方法、基线与指标的论文摘录。"
+    },
+    {
+      "id": "dsh-analysis-dataset-audit",
+      "severity": "high",
+      "problem": "输入仅提供'数据样例与字段'，却要求检查重复、缺失与选择偏差——小样例只能看格式与口径冲突，无法验证全量缺失率与抽样偏差，强判易产生无依据推测；example 为问题陈述而非样例数据。",
+      "replacementSuggestion": "做法与边界区分'从样例可见的格式/单位/类型缺陷'与'须全量统计才能验证的缺失率、重复与偏差（缺全量统计时改给校验SQL/规则）'。example 放入真实脱敏字段与若干行CSV样例。"
+    },
+    {
+      "id": "dsh-analysis-metrics",
+      "severity": "medium",
+      "problem": "做法漏了数据波动最常见的技术因素'埋点/统计口径变更与异常流量'；'提出可检验解释'未与尾部'下结论'做界分；example 无时间范围与数值基数。",
+      "replacementSuggestion": "做法补'核查采集口径变更与异常流量'；边界补'可提待检验假设，但明确标为未证实解释'。example 填'近14天对比前14天：转化率12%→15%，新增用户1万→7千'。"
+    },
+    {
+      "id": "dsh-analysis-decision-memo",
+      "severity": "medium",
+      "problem": "输出硬性要求'可逆试点'属过度流程，对合规准入或不可逆的二选一决策不适用。",
+      "replacementSuggestion": "输出'可逆试点'改为'低成本试点或验证步（当决策可分阶段或关键证据缺口较大时）'。example 候选方案简述本地模型与云API的关键条件。"
+    },
+    {
+      "id": "dsh-analysis-source-synthesis",
+      "severity": "medium",
+      "problem": "做法要求'指出来源之间是否独立'，但输入无强制出处、日期与引用链信息，缺元数据时根本无法判定来源独立性；example 把指令填进了来源材料。",
+      "replacementSuggestion": "做法与边界补'仅依据材料显式出处与引述关系判断独立性；缺来源元数据时标独立性未知'。example 来源材料放带来源标识的2-3段评价摘要。"
+    },
+    {
+      "id": "dsh-writing-document-outline",
+      "severity": "medium",
+      "problem": "边界'不要先写与决策无关的背景长文'与技术指南/教程等非决策文档（包括自身示例）冲突；尾句'下结论'也不贴合结构规划。",
+      "replacementSuggestion": "边界改为'不堆砌与读者任务无关的背景长文；不编造事实数据，每节所需素材缺口单列'。example 主题与资料放项目技术栈与安装要素，'首次使用者'移至第2栏。"
+    },
+    {
+      "id": "dsh-writing-technical-guide",
+      "severity": "medium",
+      "problem": "未要求明确适用系统/版本前提，且固定输出'恢复方法'对只读或从零搭建场景略冗余；example 仅写抽象任务，缺少技术栈与步骤，模型无法写出真实命令。",
+      "replacementSuggestion": "输出改为'前提、步骤、验证、排障与恢复方法（涉及状态修改时）'；边界补'未提供真实环境或命令时，仅列步骤结构并将具体命令标待核实'。example 填具体项目栈与启动命令草稿。"
+    },
+    {
+      "id": "dsh-writing-rfc",
+      "severity": "medium",
+      "problem": "输出缺少RFC关键项'非目标（Non-goals）'；若输入只提供了单一候选方案，做法要求'比较选项'无从下手；example 把方案目标填进了问题与证据。",
+      "replacementSuggestion": "输出补'非目标'；做法补'若仅提供单一方案，至少与维持现状对比，其他替代方向标待评估'。example 问题与证据填入实际超时率、请求耗时与阻塞数据。"
+    },
+    {
+      "id": "dsh-writing-edit-clear",
+      "severity": "medium",
+      "problem": "尾句'只根据提供的信息下结论'与文本精简改写任务不匹配；example 把任务指令和目标读者都塞进了待修改正文。",
+      "replacementSuggestion": "边界改为'不得为精简删去关键条件、限定或风险；不擅自增补原文未给事实，原文歧义或缺失处单列说明'。example 待修改正文放入一段实际冗长的说明文本。"
+    },
+    {
+      "id": "openai-writing-document-summary",
+      "severity": "high",
+      "problem": "ID 前缀错误（全套均为 dsh-，唯独本条残留 openai-，破坏目录分组与命名一致性）；边界两句重复；对非决策型报告强行要求输出'决策'易导致凑数；example 把指令填入文档内容。",
+      "replacementSuggestion": "ID 改为 'dsh-writing-document-summary'；输出'决策'改为'决策与待办（若原文涉及）'；合并边界为'不虚构负责人、日期与数字，原文未明内容单列'。example 文档内容放入一段季度报告摘录。"
+    },
+    {
+      "id": "dsh-writing-reader-test",
+      "severity": "medium",
+      "problem": "输出'复检清单'偏冗余；未区分'文档自身跳步'和'引用了未附带的外部文件/链接'，后者常被误判为内容缺失；example 把指令填进了文档正文。",
+      "replacementSuggestion": "输出精简为'问题位置、卡点原因、最小补充建议'；边界补'区分文档自身缺步与未附带的外部引用'。example 文档正文放入一段带隐含前置条件的安装说明。"
+    },
+    {
+      "id": "dsh-writing-release-notes",
+      "severity": "high",
+      "problem": "边界禁止把未验证能力写成新增功能，但3个输入字段均未承载'验证状态'，导致该规则无输入依据可执行；example 把已知限制写进了实际变更。",
+      "replacementSuggestion": "将第1输入改为'实际变更与验证状态'（或在第3栏明确列出未验证项），缺验证标注的功能标待确认；example 实际变更只留已验证能力，'云同步未实现'移至已知限制。"
+    },
+    {
+      "id": "dsh-writing-localization",
+      "severity": "medium",
+      "problem": "边界'不把改写当忠实翻译'过于死板，UI 与提示词本地化常需符合目标语习惯的意译，关键是不改变语义约束与占位符；缺失未提供术语表时的处理规则；example 填成了指令。",
+      "replacementSuggestion": "边界改为'可调整表达使之自然，但不得改变原意、条件、否定、占位符与代码标识；未给术语表时单列需统一的译名'。example 原文与译文给出一对实际中英对照文本。"
+    },
+    {
+      "id": "dsh-general-meeting-actions",
+      "severity": "medium",
+      "problem": "边界与尾句重复；输入已有'输出要求'而输出又写死4项，易发生格式冲突；口语会议中同一事项常先后改口，缺少以最终共识为准的规则；example 填成了指令。",
+      "replacementSuggestion": "做法补'同一议题有多次表态时采信最终共识，未收敛列待确认'；输出补'（若输出要求另有规定则从其格式）'；合并边界。example 会议记录放一段含分歧和未定日期的讨论纪要。"
+    },
+    {
+      "id": "dsh-general-weekly-update",
+      "severity": "medium",
+      "problem": "做法要求'按目标而非流水账归纳'，但输入没有'原定目标'，导致模型遇到零散进展时容易自行捏造目标口号；example 把受众与阻碍混入了完成与进展。",
+      "replacementSuggestion": "第1输入改为'目标与当前进展'，或做法补'未提供明确目标时按任务主题归纳，不自行拔高或臆测目标'。example 第1栏只放进度事实，受众移至第3栏。"
+    },
+    {
+      "id": "dsh-general-professional-email",
+      "severity": "low",
+      "problem": "边界'只起草，不代发'在纯提示词中属冗余声明；当输入缺称呼、附件名或回复期限时，未约定草稿中的占位写法，易被含混带过。",
+      "replacementSuggestion": "边界改为'只输出邮件草稿；缺失人名、截止时间或附件名时，正文统一用[待填:...]占位并在缺失信息栏列明'。"
+    },
+    {
+      "id": "dsh-general-learning-plan",
+      "severity": "high",
+      "problem": "尾句'只根据提供的信息下结论'直接阻断模型调用领域知识进行能力拆解与练习设计；输入未要求标明具体技术栈与本地环境，练习易流于空洞。",
+      "replacementSuggestion": "边界改为'不虚构用户的现有基础与可用时间，条件缺口单列；能力拆解与练习可基于通用学科方法，并附可演示的验收标准'。example 学习目标明确技术栈如'两周学会用断点与日志调试Node.js接口'。"
+    },
+    {
+      "id": "dsh-general-explain-concept",
+      "severity": "high",
+      "problem": "尾句'只根据提供的信息下结论'与解释概念、举例及纠偏所需的领域知识调用直接冲突；输出'理解检查'未要求附带参考答案或判定要点，无法实现自测；example 把读者和指令混进了概念或材料。",
+      "replacementSuggestion": "边界改为'不牺牲准确性换取简单，不堆砌无关背景；概念依据通用学科原理，若附私有材料则忠实于材料语义'；输出'理解检查'补'（附判定要点）'。example 第1栏仅填'幂等性与请求重试的关系'，第2栏填'前端开发者'。"
+    },
+    {
+      "id": "dsh-general-work-priorities",
+      "severity": "medium",
+      "problem": "边界与尾句重复；缺少当目标期限与资源冲突不可调和时（必须缩减范围或升级求助）的输出触发点；example 把目标混入了任务与现状。",
+      "replacementSuggestion": "做法补'资源或依赖无法满足截止期限时，单列必须裁剪或请求拍板的取舍项'；合并边界。example 第1栏列清三项工作当前进度与阻塞依赖，'先形成可验收闭环'移至第2栏。"
+    }
+  ],
+  "overall": "整体评价：48条提示词的任务拆解（任务/输入/做法/输出/边界）骨架紧凑、实用导向强，但存在4个全局性实质缺陷直接影响人机理解与运行可靠性。\n\n共性问题与可直接采用的简短改法：\n1. 【High】全48条 example 失效：每条第2、3栏完全复制元提示（'填写真实材料；缺失时明确标为未提供' / '按本项目实际约束填写'），且约半数第1栏也填成了任务指令、现象或错位字段。改法：3栏统一填入最小可运行的真实样例文本（严禁在数据字段写'审查/整理/请帮我...'等指令），如刻意展示缺口分支则直接填'未提供'。\n2. 【Medium】尾部证据边界机械重复且偶发冲突：全48条末尾均硬拼'只根据提供的信息下结论；重要缺口要指出，不补造事实。'，既与约10条的前置边界语义重复，又在教学/设计/规划/改写类提示词（如 explain-concept、learning-plan、edit-clear、document-outline）中阻塞正常的领域知识推理。改法：删去机械尾句，与特有边界合并为两套简洁版本——分析审查类：'边界：<特有禁忌>；只据给定材料与已验证结果下结论，缺口单列且不补造事实。'；设计编码教学类：'边界：<特有禁忌>；需求与环境事实不补造，缺口单列；推理建议与补充假设须标为待验证。'\n3. 【Medium】缺关键输入时的降级路径不收敛：多条提示词（如 pr-review、query-plan、dependency-upgrade、dataset-audit、release-notes）依赖特定载体（调用方代码、EXPLAIN ANALYZE、changelog、全量统计、验证状态）却未定义缺失时如何收口。改法：明确'缺核心输入载体时停止定论，仅输出最小待补清单与待核实假设'。\n4. 【High】命名规范错漏：第39条 'openai-writing-document-summary' 遗留旧前缀，须统一重命名为 'dsh-writing-document-summary'。",
+  "resolution": {
+    "accepted": "全部48条替换为具体的三字段虚构示例；移除限制正常推理的机械尾句；按条补齐关键输入缺失时的收口规则。",
+    "rejected": [
+      {
+        "suggestion": "重命名旧OpenAI条目ID",
+        "reason": "已接受方案要求保留稳定ID兼容旧偏好；保留ID但明确改编来源，不假称官方原文。"
+      }
+    ]
+  },
+  "status": "editorial-cross-review-completed",
+  "notModelTaskBenchmark": true
+}

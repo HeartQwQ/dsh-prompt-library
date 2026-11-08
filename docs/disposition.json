@@ -1,0 +1,1026 @@
+{
+  "originalCount": 170,
+  "originalBackup": "dsh-prompt-library-0.2.4-原版备份.zip",
+  "prompts": [
+    {
+      "id": "anthropic-coding-investigate-before-answering",
+      "title": "回答代码问题前先调查代码库",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-coding-avoid-overengineering",
+      "title": "避免过度设计代码改动",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-coding-general-purpose-solution",
+      "title": "编写通用解法，而不是钻测试的空子",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-coding-frontend-aesthetics",
+      "title": "前端设计美学系统提示词",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-agents-structured-research",
+      "title": "带假设追踪的结构化研究",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-agents-subagent-usage",
+      "title": "何时使用子智能体",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-agents-reversibility-guidance",
+      "title": "自主性与高风险操作确认的平衡",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-agents-tool-use-summary",
+      "title": "工具调用完成后总结工作",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-writing-avoid-excessive-markdown",
+      "title": "避免过度使用 Markdown 与项目符号",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-writing-plain-text-math",
+      "title": "纯文本数学格式",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-general-presentation-creation",
+      "title": "制作专业演示文稿",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-analysis-multidocument-review",
+      "title": "用 XML 结构分析多份文档",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-analysis-medical-quote-extraction",
+      "title": "医师助理的引文溯源",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-analysis-tax-code-qa",
+      "title": "带引文溯源的税法问答",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-extraction-email-classification",
+      "title": "把邮件归入客服分类",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-extraction-few-shot-classification",
+      "title": "少样本邮件分类",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-extraction-ticket-routing",
+      "title": "客服工单意图路由",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-business-legal-summary",
+      "title": "摘要转租协议",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-business-meta-summarization",
+      "title": "把分块摘要合并为整体摘要",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-business-customer-support-agent",
+      "title": "保险客服智能体（Eva）",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-roleplay-career-coach",
+      "title": "职业教练聊天机器人（AdAstra 的 Joe）",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-creative-haiku-no-preamble",
+      "title": "不要开场白的俳句",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-general-definitive-answer",
+      "title": "要求明确答案而不是含糊其辞",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-education-socratic-code-tutor",
+      "title": "苏格拉底式编程导师",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-agents-tool-schema-prompt",
+      "title": "用 JSONSchema 格式向 Claude 描述工具",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-agents-model-identity",
+      "title": "模型身份声明",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-agents-clean-up-temp-files",
+      "title": "任务结束后清理临时文件",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-creative-sonnet-ode",
+      "title": "以十四行诗写一首学生颂",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-general-medication-guidance",
+      "title": "儿童用药剂量护栏",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-analysis-legal-research-qa",
+      "title": "带引文编号的法律研究问答",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-writing-document-summary",
+      "title": "可直接用于决策的文档摘要",
+      "status": "re-edited-stable-id",
+      "note": "保留稳定ID，内容重新编辑；见当前来源元数据"
+    },
+    {
+      "id": "openai-analysis-internal-knowledge-search",
+      "title": "检索内部知识并核对多份来源",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-business-procurement-review",
+      "title": "以采购视角审查供应商备忘录",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-analysis-market-entry-research",
+      "title": "为首家展厅比较候选城市",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-agents-prompt-builder",
+      "title": "元提示：让模型帮你重写提示词",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-analysis-output-quality-check",
+      "title": "输出质量检查清单",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-education-gardening-guide",
+      "title": "多年生花卉园艺入门指南",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-writing-output-verbosity-spec",
+      "title": "控制输出详略与结构",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-coding-design-scope-constraints",
+      "title": "防止前端任务范围蔓延",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-analysis-long-context-handling",
+      "title": "长上下文回忆与重新锚定",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-analysis-uncertainty-and-ambiguity",
+      "title": "处理歧义而不臆造事实",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-business-high-risk-self-check",
+      "title": "高风险回答的自检",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-extraction-structured-json",
+      "title": "从表格与 PDF 中提取结构化 JSON",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-agents-tool-usage-rules",
+      "title": "面向生产智能体的工具调用规则",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-agents-web-search-rules",
+      "title": "联网搜索与研究规则",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-agents-user-updates-spec",
+      "title": "长时间智能体运行中的进度更新",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-coding-frontend-design",
+      "title": "前端任务：避免“AI 味”设计",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-roleplay-friendly-personality",
+      "title": "友好型结对编程人格",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-agents-metaprompting-improvements",
+      "title": "用元提示让智能体改进自身指令",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-agents-parallel-tool-calling",
+      "title": "并行探索与读取指令",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-image-video-prompt-template",
+      "title": "结构化视频生成提示模板",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-image-robot-workshop-animation",
+      "title": "手绘风机器人工作室镜头",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-creative-rooftop-romance-scene",
+      "title": "1970 年代屋顶浪漫场景",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-image-cinematic-shot-brief",
+      "title": "超详细的电影级镜头说明",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-agents-autonomy-and-persistence",
+      "title": "编码智能体的自主性与坚持",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-coding-implementation-standards",
+      "title": "代码实现规范",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-creative-detective-interrogation",
+      "title": "带台词的侦探审讯场景",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-roleplay-professional-personality",
+      "title": "专业型智能体人格",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-roleplay-fact-based-personality",
+      "title": "基于事实、不奉承的人格",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-education-exploratory-personality",
+      "title": "探索式教学人格",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-coding-add-rate-limiting",
+      "title": "添加限流并保持测试通过",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "anthropic-general-explain-with-html-diagram",
+      "title": "用带示意图的 HTML 页面解释逻辑",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-marketing-launch-campaign-kit",
+      "title": "制作首发营销活动套件初稿",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-marketing-campaign-kit-audit",
+      "title": "发布前审计营销活动套件",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-product-launch-plan",
+      "title": "把产品简报变成发布计划",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-product-executive-brief",
+      "title": "把季度报告变成管理层简报与幻灯片",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-product-status-update",
+      "title": "一页纸项目状态更新",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "openai-product-meeting-notes-update",
+      "title": "把会议笔记变成简短的团队更新",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-writing-essay-outline",
+      "title": "生成文章提纲",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-business-dvd-2025",
+      "title": "寻找聪明的商业点子",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-analysis-one-sentence-summary",
+      "title": "用一句话总结",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-extraction-classify-large-small",
+      "title": "将对象分类为大型或小型",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-extraction-order-json",
+      "title": "将订单转换为 JSON",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-marketing-flower-shop-names",
+      "title": "为干花店起名",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-general-camping-checklist",
+      "title": "露营装备清单",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-analysis-snow-explanation",
+      "title": "选择最佳解释",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-general-router-troubleshooting",
+      "title": "依据给定上下文作答",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-extraction-classify-with-prefix",
+      "title": "用标签前缀分类文本",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-education-odyssey-multiple-choice",
+      "title": "以选择题形式作答",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-agents-grounded-assistant",
+      "title": "严格依据上下文的助手",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-agents-plan-before-answer",
+      "title": "作答前先规划",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-agents-self-critique",
+      "title": "回答前自我审查",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-agents-xml-prompt-template",
+      "title": "XML 结构化提示词模板",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-coding-markdown-persona-template",
+      "title": "面向代码输出的 Markdown 人设",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-general-gemini3-user-template",
+      "title": "Gemini 3 用户提示词模板",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-agents-time-sensitive-search",
+      "title": "让工具调用基于当前日期",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-marketing-ad-copy",
+      "title": "按说服策略类别撰写广告文案",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-writing-blog-post",
+      "title": "根据照片写博客文章",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-education-lesson-plan",
+      "title": "设计符合年级水平的课程",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-image-campaign-visuals",
+      "title": "创作营销活动视觉素材",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-roleplay-spokesperson-interview",
+      "title": "为发言人准备采访演练",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-marketing-sem-keywords",
+      "title": "扩展 SEM 关键词",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-business-program-summary-email",
+      "title": "起草执行摘要邮件",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-writing-project-status-template",
+      "title": "制作项目状态邮件模板",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-general-business-trip-itinerary",
+      "title": "规划两天商务行程",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-product-workback-schedule",
+      "title": "制定倒排工作计划",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-analysis-call-transcript-summary",
+      "title": "总结通话记录",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-coding-uat-test-table",
+      "title": "生成用户验收测试",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "meta-general-instruct-chat",
+      "title": "Llama 3.1 指令对话格式",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "meta-agents-builtin-tools",
+      "title": "启用 Llama 内置工具",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "meta-analysis-tool-call-equation",
+      "title": "借助工具求解方程",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "meta-general-who-are-you",
+      "title": "Llama 3.2 用户/助手对话",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "meta-coding-code-interpreter",
+      "title": "触发 Llama 代码解释器",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "meta-general-base-completion",
+      "title": "基座模型续写提示",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "meta-creative-jeopardy",
+      "title": "以《危险边缘》问答形式回答",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "meta-general-describe-image",
+      "title": "用两句话描述图片",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "microsoft-education-training-manual-outline",
+      "title": "撰写培训手册提纲",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "microsoft-general-lisbon-trip",
+      "title": "结合附件规划三天行程",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "microsoft-analysis-email-summary",
+      "title": "汇总指定时间段的邮件",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "microsoft-education-explain-concept-script",
+      "title": "以讲解脚本解释概念",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "microsoft-general-trip-planning-template",
+      "title": "行程规划提示模板",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "microsoft-writing-message-template",
+      "title": "可复用的写作模板",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "microsoft-marketing-marketing-plan",
+      "title": "起草产品上市营销计划",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "microsoft-product-customer-use-cases",
+      "title": "按需求排序的客户用例模板",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "microsoft-business-account-plan",
+      "title": "起草战略客户计划",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "microsoft-analysis-document-takeaways",
+      "title": "提炼文档要点",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "meta-agents-web-search",
+      "title": "调用 Llama 内置网页搜索",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-translation-fr-to-en",
+      "title": "将法语文档翻译成英文",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-translation-document-multi-language",
+      "title": "将文档段落翻译成法语和西班牙语",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "google-translation-ja-to-en",
+      "title": "将日语文档翻译成英文",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "deepseek-extraction-exam-json",
+      "title": "把试题解析为 JSON",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "deepseek-analysis-search-answer",
+      "title": "结合搜索结果并标注引用回答",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "deepseek-general-file-qa",
+      "title": "基于上传文件内容提问",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "deepseek-coding-quick-sort-prefix",
+      "title": "用对话前缀续写生成快速排序代码",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "deepseek-coding-fim-fib",
+      "title": "补全斐波那契函数中间部分",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "qwen-marketing-weibo-post",
+      "title": "撰写微博产品推广帖",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "qwen-coding-php-expert",
+      "title": "以资深 PHP 专家身份设计方案",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "qwen-marketing-xiaohongshu-note",
+      "title": "写一篇小红书种草笔记",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "qwen-education-math-word-problem",
+      "title": "按任务步骤求解数学应用题",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "qwen-extraction-film-review-summary",
+      "title": "用分隔符总结影评",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "qwen-analysis-json-validation-cot",
+      "title": "用思维链校验 JSON 结构",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "qwen-extraction-sales-call-json",
+      "title": "从销售对话中提取多维度分析 JSON",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "qwen-agents-support-knowledge-base",
+      "title": "基于知识库的客服智能体",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "qwen-extraction-tech-specs-fewshot",
+      "title": "按示例字段抽取技术规格 JSON",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "qwen-image-night-sky",
+      "title": "生成星空夜空图像",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "qwen-business-negotiation-crispe",
+      "title": "模拟薪资谈判",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "qwen-writing-sustainability-blog",
+      "title": "撰写可持续能源博客文章",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "kimi-agents-kimi-persona",
+      "title": "Kimi 助手系统提示词",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "kimi-analysis-compare-two-articles",
+      "title": "比较两篇文章的论点",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "kimi-writing-paper-title-options",
+      "title": "为论文题目提供替代方案",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "kimi-translation-summary-two-step",
+      "title": "先摘要后翻译的两步任务",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "kimi-extraction-reference-article-qa",
+      "title": "仅依据所给文章回答",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "kimi-agents-support-troubleshooting",
+      "title": "技术支持排障智能体",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "kimi-writing-two-sentence-summary",
+      "title": "50 字以内两句话摘要",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "kimi-agents-ppt-assistant",
+      "title": "PPT 制作助手",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "kimi-analysis-recursive-long-doc-summary",
+      "title": "分章节总结长篇文档",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "kimi-general-yearly-work-report",
+      "title": "把工作记录总结为年度汇报",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "zhipu-coding-concurrency-fix",
+      "title": "在限定范围内修复并发问题",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "zhipu-product-customer-feedback",
+      "title": "为评审会整理客户反馈",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "zhipu-extraction-issues-json",
+      "title": "以 JSON 数组输出问题清单",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "zhipu-analysis-multi-doc-compare",
+      "title": "带来源标注的方案对比",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "zhipu-agents-default-to-action",
+      "title": "主动诊断模式的智能体",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "zhipu-agents-conservative-mode",
+      "title": "保守分析模式的智能体",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "zhipu-agents-parallel-tool-calls",
+      "title": "并行执行工具调用",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "zhipu-writing-structured-doc-task",
+      "title": "用 Markdown 结构总结研究方案",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "zhipu-writing-technical-doc-review",
+      "title": "审查技术文档的可读性",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "zhipu-coding-long-horizon-task",
+      "title": "长程编码任务提示词",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "ernie-writing-popular-science",
+      "title": "撰写科普文章",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "ernie-creative-film-review",
+      "title": "撰写结构化影评",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "ernie-education-lab-report",
+      "title": "撰写实验报告",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "ernie-education-essay-review",
+      "title": "点评并润色小学生作文",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "ernie-education-math-socratic-tutor",
+      "title": "苏格拉底式数学辅导",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "ernie-analysis-history-attribution",
+      "title": "从多维度归因历史事件",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "ernie-product-learning-progress",
+      "title": "总结学情并给出续费理由",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "ernie-education-step-derivation",
+      "title": "生成考试题推导过程",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "ernie-general-next-question-suggestions",
+      "title": "推测学生的下一个问题",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "ernie-extraction-json-action",
+      "title": "以 JSON 的 action 字段路由回答",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "zhipu-translation-recommended-prompt",
+      "title": "官方推荐的高质量翻译 Prompt",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "zhipu-translation-quality-evaluator",
+      "title": "按信达雅三维度评估翻译质量",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    },
+    {
+      "id": "qwen-translation-style-rewrite",
+      "title": "把文案改写成三种不同风格",
+      "status": "archived-not-default",
+      "note": "原条目完整保存在原版备份；不继续作为默认精选"
+    }
+  ]
+}

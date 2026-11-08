@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 2,
+  "sources": [
+    {
+      "id": "debug",
+      "name": "Superpowers · Systematic debugging",
+      "url": "https://raw.githubusercontent.com/obra/superpowers/main/skills/systematic-debugging/SKILL.md",
+      "license": "MIT",
+      "idea": "先复现并收集证据，再检验根因假设",
+      "checkedAt": "2026-11-09",
+      "sha256": "51c6435d98c83c42c96ba7c35725a0b2c376cd487fb1a4e6bd0ddbe7e33ef202",
+      "status": "retrieved",
+      "reuse": "观点参考与独立改编，不作为原文转载"
+    },
+    {
+      "id": "verify",
+      "name": "Superpowers · Verification before completion",
+      "url": "https://raw.githubusercontent.com/obra/superpowers/main/skills/verification-before-completion/SKILL.md",
+      "license": "MIT",
+      "idea": "将完成声明绑定到实际验证结果",
+      "checkedAt": "2026-11-09",
+      "sha256": "2befe7fc55bcadaa3d97dd9e8efeb633d2561c0ebe74c5a8b17c4d9e7e4520b3",
+      "status": "retrieved",
+      "reuse": "观点参考与独立改编，不作为原文转载"
+    },
+    {
+      "id": "docs",
+      "name": "Anthropic · Document co-authoring",
+      "url": "https://raw.githubusercontent.com/anthropics/skills/main/skills/doc-coauthoring/SKILL.md",
+      "license": "见单项许可文件",
+      "idea": "确认读者与目标，迭代结构，再做读者检验",
+      "checkedAt": "2026-11-09",
+      "sha256": "2e47d78846faeea4a56e9809c52700087a15a2155a3f293a3efbaded81398ef4",
+      "status": "retrieved",
+      "reuse": "观点参考与独立改编，不作为原文转载"
+    },
+    {
+      "id": "frontend",
+      "name": "Anthropic · Frontend design",
+      "url": "https://raw.githubusercontent.com/anthropics/skills/main/skills/frontend-design/SKILL.md",
+      "license": "见单项许可文件",
+      "idea": "根据产品任务形成有意图的视觉与信息层级",
+      "checkedAt": "2026-11-09",
+      "sha256": "d91970639e9f5c37682ac7ab60094d35f1c7c1f38d731bd56396563aee10c1d3",
+      "status": "retrieved",
+      "reuse": "观点参考与独立改编，不作为原文转载"
+    },
+    {
+      "id": "architecture",
+      "name": "Fabric · Design document",
+      "url": "https://raw.githubusercontent.com/danielmiessler/Fabric/main/data/patterns/create_design_document/system.md",
+      "license": "MIT",
+      "idea": "将业务目标、系统边界和风险纳入方案",
+      "checkedAt": "2026-11-09",
+      "sha256": "23ef7ffda48444bc1b176125393ef750c8ba1781f0da085e391cbbfe1dee14e8",
+      "status": "retrieved",
+      "reuse": "观点参考与独立改编，不作为原文转载"
+    },
+    {
+      "id": "claims",
+      "name": "Fabric · Analyze claims",
+      "url": "https://raw.githubusercontent.com/danielmiessler/Fabric/main/data/patterns/analyze_claims/system.md",
+      "license": "MIT",
+      "idea": "把论断、证据和反证分开审查",
+      "checkedAt": "2026-11-09",
+      "sha256": "5650bdfcad97f1404cac5515a268a98d801199655225aaf6994b0b5d2f1d093c",
+      "status": "retrieved",
+      "reuse": "观点参考与独立改编，不作为原文转载"
+    },
+    {
+      "id": "project",
+      "name": "Google Workspace · Project management",
+      "url": "https://workspace.google.com/resources/ai/prompts-for-project-management/",
+      "license": "官方网页，参考链接；正文独立改编",
+      "idea": "明确交付物、依赖、负责人和时间约束",
+      "checkedAt": "2026-11-09",
+      "sha256": "9f8e81d7a6e16fe2cf193bbf7e4ff718eb890f7d642d2de918a292ad50048249",
+      "status": "retrieved",
+      "reuse": "观点参考与独立改编，不作为原文转载"
+    },
+    {
+      "id": "a11y",
+      "name": "W3C WAI · Tutorials",
+      "url": "https://www.w3.org/WAI/tutorials/",
+      "license": "参考链接；正文独立编写",
+      "idea": "按实际交互任务检查可访问性",
+      "checkedAt": "2026-11-09",
+      "sha256": "2b8d3b9c67fe644b61acc1b5b01991a9b31671619813f8a4a657f3d54a396ef2",
+      "status": "retrieved",
+      "reuse": "观点参考与独立改编，不作为原文转载"
+    }
+  ]
+}

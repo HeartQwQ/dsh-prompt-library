@@ -1,0 +1,10 @@
+graphify-out/
+.codegraph/
+.dev-spec/
+scratch/
+node_modules/
+*.tgz
+*.zip
+.env
+.env.*
+*.log

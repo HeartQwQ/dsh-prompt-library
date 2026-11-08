@@ -1,0 +1,75 @@
+{
+  "name": "dsh-prompt-library",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "description": "Curated task prompts, Skill-derived methods and model-configurable prompt optimization for DSH.",
+  "license": "MIT",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "service.mjs",
+    "shared.mjs",
+    "client.js",
+    "client.src.js",
+    "library.css",
+    "build-library.mjs",
+    "service.test.mjs",
+    "integration.test.mjs",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "data/catalog.json",
+    "data/sources.json",
+    "data/skills.json",
+    "README.md",
+    "docs/VALIDATION.md",
+    "docs/SOURCE-NOTES.md",
+    "docs/API.md",
+    "docs/disposition.json",
+    "docs/design-review.json",
+    "docs/peer-review-resolution.json",
+    "licenses/*"
+  ],
+  "scripts": {
+    "build": "node build-library.mjs",
+    "check": "node build-library.mjs --check",
+    "test": "node --test service.test.mjs integration.test.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-layout"
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HeartQwQ/dsh-prompt-library.git"
+  },
+  "homepage": "https://github.com/HeartQwQ/dsh-prompt-library#readme",
+  "bugs": {
+    "url": "https://github.com/HeartQwQ/dsh-prompt-library/issues"
+  },
+  "author": "HeartQwQ",
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "prompt-library"
+  ],
+  "engines": {
+    "node": ">=24.9.0",
+    "dsh": ">=0.2.2-rc.1 <0.2.3"
+  }
+}

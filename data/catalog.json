@@ -1,0 +1,3286 @@
+{
+  "schemaVersion": 2,
+  "categories": [
+    {
+      "id": "coding",
+      "label": "编程、调试与测试"
+    },
+    {
+      "id": "design",
+      "label": "架构与UI/UX"
+    },
+    {
+      "id": "product",
+      "label": "产品与项目"
+    },
+    {
+      "id": "analysis",
+      "label": "研究与分析"
+    },
+    {
+      "id": "writing",
+      "label": "文档与写作"
+    },
+    {
+      "id": "general",
+      "label": "办公与学习"
+    }
+  ],
+  "prompts": [
+    {
+      "id": "dsh-coding-root-cause",
+      "category": "coding",
+      "title": "定位错误根因",
+      "purpose": "对齐预期和实际行为",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：定位错误根因。\n\n输入：\n问题与日志：{{问题与日志}}\n复现步骤：{{复现步骤}}\n环境与近期改动：{{环境与近期改动}}\n\n做法：对齐预期和实际行为；沿输入、处理、输出追踪最早出现偏差的边界；为候选原因给出最小区分实验。\n输出：证据表、优先假设、复现与验证步骤。\n边界：日志不足时先列最关键的缺口，不把猜测当结论。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。",
+      "variables": [
+        {
+          "name": "问题与日志",
+          "required": true
+        },
+        {
+          "name": "复现步骤",
+          "required": true
+        },
+        {
+          "name": "环境与近期改动",
+          "required": true
+        }
+      ],
+      "tags": [
+        "定位错误根因",
+        "对齐预期和实际行为"
+      ],
+      "sourceIds": [
+        "debug"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "systematic-debugging"
+      ],
+      "ideas": [
+        "先复现并收集证据，再检验根因假设"
+      ],
+      "exampleInput": {
+        "问题与日志": "CI调用GET /health返回500；错误为DB_CONNECT_TIMEOUT，本地返回200",
+        "复现步骤": "pnpm test:api；连续3次CI失败；单独本地执行均通过",
+        "环境与近期改动": "Linux CI；昨天增加连接池，数据库地址配置近期未变"
+      },
+      "acceptance": [
+        "明确产出：证据表、优先假设、复现与验证步骤",
+        "保持边界：日志不足时先列最关键的缺口，不把猜测当结论",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-regression",
+      "category": "coding",
+      "title": "设计回归测试",
+      "purpose": "找出能证明旧错误的最小输入",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：设计回归测试。\n\n输入：\n缺陷描述：{{缺陷描述}}\n原有行为与测试：{{原有行为与测试}}\n技术约束：{{技术约束}}\n\n做法：找出能证明旧错误的最小输入；分别设计正常、边界和失败路径；说明测试应该在哪个断言失败。\n输出：测试用例、断言、必要夹具和运行入口。\n边界：不写只匹配实现细节的测试，未运行就标为待验证。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n缺少测试框架或运行入口时只给用例和伪代码，入口标待补；明确旧代码应失败的断言。",
+      "variables": [
+        {
+          "name": "缺陷描述",
+          "required": true
+        },
+        {
+          "name": "原有行为与测试",
+          "required": true
+        },
+        {
+          "name": "技术约束",
+          "required": true
+        }
+      ],
+      "tags": [
+        "设计回归测试",
+        "找出能证明旧错误的最小输入"
+      ],
+      "sourceIds": [
+        "verify"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "verification-before-completion"
+      ],
+      "ideas": [
+        "将完成声明绑定到实际验证结果"
+      ],
+      "exampleInput": {
+        "缺陷描述": "连续点击提交会插入两条订单；修复目标是同一幂等键只保存一次",
+        "原有行为与测试": "Vitest；已有POST /orders正常创建和校验失败两组测试",
+        "技术约束": "测试使用隔离内存库，不连接生产；入口pnpm test"
+      },
+      "acceptance": [
+        "明确产出：测试用例、断言、必要夹具和运行入口",
+        "保持边界：不写只匹配实现细节的测试，未运行就标为待验证",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-pr-review",
+      "category": "coding",
+      "title": "审查代码改动",
+      "purpose": "沿输入和调用方检查行为变化",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：审查代码改动。\n\n输入：\n改动内容：{{改动内容}}\n需求与契约：{{需求与契约}}\n已有验证：{{已有验证}}\n\n做法：沿输入和调用方检查行为变化；只报告能解释触发条件与影响的发现；按风险排序。\n输出：发现的位置、触发例、影响、最小修复及剩余验证。\n边界：不把风格偏好当缺陷；只看片段时明确覆盖不足。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n调用方未提供时单列跨边界待核实点；未发现缺陷也说明审查范围与盲区。",
+      "variables": [
+        {
+          "name": "改动内容",
+          "required": true
+        },
+        {
+          "name": "需求与契约",
+          "required": true
+        },
+        {
+          "name": "已有验证",
+          "required": true
+        }
+      ],
+      "tags": [
+        "审查代码改动",
+        "沿输入和调用方检查行为变化"
+      ],
+      "sourceIds": [
+        "verify"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "verification-before-completion"
+      ],
+      "ideas": [
+        "将完成声明绑定到实际验证结果"
+      ],
+      "exampleInput": {
+        "改动内容": "async function pay(){try{return await charge()}catch{return await charge()}}",
+        "需求与契约": "charge可能已扣款但响应超时；要求不重复扣款；未提供调用方",
+        "已有验证": "现有用例仅覆盖首次成功；没有幂等与超时测试"
+      },
+      "acceptance": [
+        "明确产出：发现的位置、触发例、影响、最小修复及剩余验证",
+        "保持边界：不把风格偏好当缺陷；只看片段时明确覆盖不足",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-safe-refactor",
+      "category": "coding",
+      "title": "制定保行为重构",
+      "purpose": "先列可观察行为与不可变契约",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：制定保行为重构。\n\n输入：\n当前实现：{{当前实现}}\n重构目标：{{重构目标}}\n兼容与验证要求：{{兼容与验证要求}}\n\n做法：先列可观察行为与不可变契约；拆成可回退的小步骤；指出每步如何验证已知契约及未覆盖项。\n输出：行为清单、重构步骤、验证与回退点。\n边界：不要顺便升级依赖、改公共接口或重写无关模块。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n验证仅覆盖已知契约；异常类型、时序、日志等隐式副作用列为待核对，不承诺形式化证明。",
+      "variables": [
+        {
+          "name": "当前实现",
+          "required": true
+        },
+        {
+          "name": "重构目标",
+          "required": true
+        },
+        {
+          "name": "兼容与验证要求",
+          "required": true
+        }
+      ],
+      "tags": [
+        "制定保行为重构",
+        "先列可观察行为与不可变契约"
+      ],
+      "sourceIds": [
+        "verify"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "verification-before-completion"
+      ],
+      "ideas": [
+        "将完成声明绑定到实际验证结果"
+      ],
+      "exampleInput": {
+        "当前实现": "两个处理器均执行JSON.parse、字段校验和400错误转换；一个保留原始错误码",
+        "重构目标": "提取公共解析函数，保持签名、状态码及错误字段不变",
+        "兼容与验证要求": "只能改这两个处理器；已有接口快照测试，日志副作用未覆盖"
+      },
+      "acceptance": [
+        "明确产出：行为清单、重构步骤、验证与回退点",
+        "保持边界：不要顺便升级依赖、改公共接口或重写无关模块",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-race-condition",
+      "category": "coding",
+      "title": "排查异步竞态",
+      "purpose": "按时间线列并发任务与写入",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：排查异步竞态。\n\n输入：\n异步流程：{{异步流程}}\n错误现象：{{错误现象}}\n状态归属：{{状态归属}}\n\n做法：按时间线列并发任务与写入；构造旧响应晚于新响应的顺序；比较取消、版本号和幂等保护。\n输出：竞态时序、最小复现、保护方案与并发测试。\n边界：区分取消请求和撤销已发生副作用。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n同时考虑并发写、重复触发与组件销毁后的回调，不仅检查响应乱序。",
+      "variables": [
+        {
+          "name": "异步流程",
+          "required": true
+        },
+        {
+          "name": "错误现象",
+          "required": true
+        },
+        {
+          "name": "状态归属",
+          "required": true
+        }
+      ],
+      "tags": [
+        "排查异步竞态",
+        "按时间线列并发任务与写入"
+      ],
+      "sourceIds": [
+        "debug"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "systematic-debugging"
+      ],
+      "ideas": [
+        "先复现并收集证据，再检验根因假设"
+      ],
+      "exampleInput": {
+        "异步流程": "input触发请求，Promise完成后直接给results赋值，无版本检查",
+        "错误现象": "输入ab后再输入abc，ab响应更晚到达并覆盖abc结果",
+        "状态归属": "results属于当前页面；切页卸载后不应再更新"
+      },
+      "acceptance": [
+        "明确产出：竞态时序、最小复现、保护方案与并发测试",
+        "保持边界：区分取消请求和撤销已发生副作用",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-slow-request",
+      "category": "coding",
+      "title": "定位慢请求瓶颈",
+      "purpose": "分解排队、计算、存储与网络耗时",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：定位慢请求瓶颈。\n\n输入：\n调用链与指标：{{调用链与指标}}\n负载条件：{{负载条件}}\n性能目标：{{性能目标}}\n\n做法：分解排队、计算、存储与网络耗时；检查测量口径；优先提出一次只改变一个因素的实验。\n输出：瓶颈候选、补充观测点、实验及通过标准。\n边界：无同条件数据时不宣称优化百分比。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n缺少分段耗时或trace时先给采集方案，不将候选原因当成已确认瓶颈。",
+      "variables": [
+        {
+          "name": "调用链与指标",
+          "required": true
+        },
+        {
+          "name": "负载条件",
+          "required": true
+        },
+        {
+          "name": "性能目标",
+          "required": true
+        }
+      ],
+      "tags": [
+        "定位慢请求瓶颈",
+        "分解排队、计算、存储与网络耗时"
+      ],
+      "sourceIds": [
+        "debug"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "systematic-debugging"
+      ],
+      "ideas": [
+        "先复现并收集证据，再检验根因假设"
+      ],
+      "exampleInput": {
+        "调用链与指标": "链路为网关→鉴权→订单SQL→风控RPC；P95从200ms升至2s，未采集分段耗时",
+        "负载条件": "同一测试环境，50并发，1000请求；数据库数据量较上次翻倍",
+        "性能目标": "目标P95小于500ms；先允许只读观测，不更改生产索引"
+      },
+      "acceptance": [
+        "明确产出：瓶颈候选、补充观测点、实验及通过标准",
+        "保持边界：无同条件数据时不宣称优化百分比",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-memory-growth",
+      "category": "coding",
+      "title": "分析内存增长",
+      "purpose": "区分峰值、常驻、缓存和泄漏",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：分析内存增长。\n\n输入：\n阶段内存记录：{{阶段内存记录}}\n对象生命周期：{{对象生命周期}}\n运行限制：{{运行限制}}\n\n做法：区分峰值、常驻、缓存和泄漏；按阶段追踪同时存活的副本；设计可重复的释放实验。\n输出：生命周期表、候选原因、采样与复测计划。\n边界：不把历史倍数直接作为当前容量估算。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n先确认运行时及RSS、堆内存口径；无堆采样时不直接定性为泄漏。",
+      "variables": [
+        {
+          "name": "阶段内存记录",
+          "required": true
+        },
+        {
+          "name": "对象生命周期",
+          "required": true
+        },
+        {
+          "name": "运行限制",
+          "required": true
+        }
+      ],
+      "tags": [
+        "分析内存增长",
+        "区分峰值、常驻、缓存和泄漏"
+      ],
+      "sourceIds": [
+        "debug"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "systematic-debugging"
+      ],
+      "ideas": [
+        "先复现并收集证据，再检验根因假设"
+      ],
+      "exampleInput": {
+        "阶段内存记录": "虚构采样：开始RSS80MB/堆40MB；解析峰值RSS420MB/堆300MB；结束RSS260MB/堆45MB",
+        "对象生命周期": "Node.js；任务持有源文本、AST和JSON；任务结束后引用释放但未提供堆快照",
+        "运行限制": "容器512MB，每分钟处理一个任务；需区分GC、分配器保留与泄漏"
+      },
+      "acceptance": [
+        "明确产出：生命周期表、候选原因、采样与复测计划",
+        "保持边界：不把历史倍数直接作为当前容量估算",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-api-failure",
+      "category": "coding",
+      "title": "设计接口失败路径",
+      "purpose": "区分校验、权限、冲突、上游与未知提交结果",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：设计接口失败路径。\n\n输入：\n接口契约：{{接口契约}}\n失败类型：{{失败类型}}\n客户端行为：{{客户端行为}}\n\n做法：区分校验、权限、冲突、上游与未知提交结果；核对状态码及错误字段；说明客户端可安全重试的条件。\n输出：失败矩阵、响应样例、重试边界与测试。\n边界：不把超时等同于服务端未提交。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n先核对幂等键和状态查询能力；缺失时明确重试所依赖的新增设计。",
+      "variables": [
+        {
+          "name": "接口契约",
+          "required": true
+        },
+        {
+          "name": "失败类型",
+          "required": true
+        },
+        {
+          "name": "客户端行为",
+          "required": true
+        }
+      ],
+      "tags": [
+        "设计接口失败路径",
+        "区分校验、权限、冲突、上游与未知提交结果"
+      ],
+      "sourceIds": [
+        "verify"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "verification-before-completion"
+      ],
+      "ideas": [
+        "将完成声明绑定到实际验证结果"
+      ],
+      "exampleInput": {
+        "接口契约": "POST /orders；请求没有幂等键；3秒超时返回504；无状态查询入口",
+        "失败类型": "参数错误、无权限、版本冲突、上游失败、服务端提交后响应丢失",
+        "客户端行为": "客户端当前遇到超时会立即重试；订单不可重复创建"
+      },
+      "acceptance": [
+        "明确产出：失败矩阵、响应样例、重试边界与测试",
+        "保持边界：不把超时等同于服务端未提交",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-input-decoding",
+      "category": "coding",
+      "title": "审查边界数据解码",
+      "purpose": "验证缺失、null、类型错、超界、额外字段和旧版本输入",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：审查边界数据解码。\n\n输入：\n输入样例：{{输入样例}}\n目标类型：{{目标类型}}\n兼容要求：{{兼容要求}}\n\n做法：验证缺失、null、类型错、超界、额外字段和旧版本输入；分开解析与业务校验。\n输出：解码规则、错误反馈、边界用例。\n边界：不要用类型断言代替运行时校验。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n未提供现有解码实现时只设计规则；检查空串、数值精度与载荷上限。",
+      "variables": [
+        {
+          "name": "输入样例",
+          "required": true
+        },
+        {
+          "name": "目标类型",
+          "required": true
+        },
+        {
+          "name": "兼容要求",
+          "required": true
+        }
+      ],
+      "tags": [
+        "审查边界数据解码",
+        "验证缺失、null、类型错、超界、额外字段和旧版本输入"
+      ],
+      "sourceIds": [
+        "verify"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "verification-before-completion"
+      ],
+      "ideas": [
+        "将完成声明绑定到实际验证结果"
+      ],
+      "exampleInput": {
+        "输入样例": "{\"amount\":\"12.50\",\"count\":null,\"id\":\"9007199254740993\"}",
+        "目标类型": "amount为十进制定点金额；count可省略但不能为null；id必须保持字符串",
+        "兼容要求": "旧客户端可能省略count；未知字段是否接受待确认；未提供现有解码代码"
+      },
+      "acceptance": [
+        "明确产出：解码规则、错误反馈、边界用例",
+        "保持边界：不要用类型断言代替运行时校验",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-db-migration",
+      "category": "coding",
+      "title": "规划数据库迁移",
+      "purpose": "区分结构、数据回填与应用切换",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：规划数据库迁移。\n\n输入：\n现有与目标结构：{{现有与目标结构}}\n数据规模：{{数据规模}}\n可用性约束：{{可用性约束}}\n\n做法：区分结构、数据回填与应用切换；检查旧新版本共存；明确备份、验证和回退条件。\n输出：迁移顺序、锁与兼容风险、核对SQL意图及验收。\n边界：不直接执行迁移；不可逆转换要明确说明。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n锁风险与DDL能力须按数据库类型、版本核实；未提供时标待核实。",
+      "variables": [
+        {
+          "name": "现有与目标结构",
+          "required": true
+        },
+        {
+          "name": "数据规模",
+          "required": true
+        },
+        {
+          "name": "可用性约束",
+          "required": true
+        }
+      ],
+      "tags": [
+        "规划数据库迁移",
+        "区分结构、数据回填与应用切换"
+      ],
+      "sourceIds": [
+        "verify"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "verification-before-completion"
+      ],
+      "ideas": [
+        "将完成声明绑定到实际验证结果"
+      ],
+      "exampleInput": {
+        "现有与目标结构": "PostgreSQL 16；orders(id bigint,status text)；目标增加必填tenant_id，历史映射来自独立文件",
+        "数据规模": "表约500万行，持续写入；具体锁等待数据未提供",
+        "可用性约束": "新旧应用需共存一天；可分批回填，不接受长时间停机"
+      },
+      "acceptance": [
+        "明确产出：迁移顺序、锁与兼容风险、核对SQL意图及验收",
+        "保持边界：不直接执行迁移；不可逆转换要明确说明",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-query-plan",
+      "category": "coding",
+      "title": "分析数据库查询计划",
+      "purpose": "以实际计划识别扫描、排序、连接和估算偏差",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：分析数据库查询计划。\n\n输入：\n查询与执行计划：{{查询与执行计划}}\n表及索引信息：{{表及索引信息}}\n数据分布：{{数据分布}}\n\n做法：以实际计划识别扫描、排序、连接和估算偏差；比较最小索引或查询修改；给同条件复测方案。\n输出：计划解释、候选改动、写入成本与验证指标。\n边界：缺执行计划就先索取，不凭索引名称断言有效。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n区分预估与实测执行计划；没有实际行数和耗时不下索引定论。补采样不得默认在生产运行有副作用的EXPLAIN ANALYZE。",
+      "variables": [
+        {
+          "name": "查询与执行计划",
+          "required": true
+        },
+        {
+          "name": "表及索引信息",
+          "required": true
+        },
+        {
+          "name": "数据分布",
+          "required": true
+        }
+      ],
+      "tags": [
+        "分析数据库查询计划",
+        "以实际计划识别扫描、排序、连接和估算偏差"
+      ],
+      "sourceIds": [
+        "debug"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "systematic-debugging"
+      ],
+      "ideas": [
+        "先复现并收集证据，再检验根因假设"
+      ],
+      "exampleInput": {
+        "查询与执行计划": "SELECT id FROM orders WHERE tenant_id=7 ORDER BY created_at DESC LIMIT 50；仅EXPLAIN显示Seq Scan+Sort，未提供ANALYZE",
+        "表及索引信息": "已有主键id索引和(tenant_id,status)索引；PostgreSQL 16",
+        "数据分布": "约500万行，租户7占70%；没有实际行数与耗时"
+      },
+      "acceptance": [
+        "明确产出：计划解释、候选改动、写入成本与验证指标",
+        "保持边界：缺执行计划就先索取，不凭索引名称断言有效",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-cancel-work",
+      "category": "coding",
+      "title": "明确取消和清理语义",
+      "purpose": "标出可取消的等待、已开始的阻塞工作和不可撤销提交",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：明确取消和清理语义。\n\n输入：\n任务流程：{{任务流程}}\n资源与副作用：{{资源与副作用}}\n取消入口：{{取消入口}}\n\n做法：标出可取消的等待、已开始的阻塞工作和不可撤销提交；给资源所有者及清理顺序。\n输出：取消状态机、清理责任、未知结果处理和测试。\n边界：不声称取消异步句柄会停止所有底层工作。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n处理重复取消、完成瞬间取消与清理超时，不为简单任务强画复杂状态机。",
+      "variables": [
+        {
+          "name": "任务流程",
+          "required": true
+        },
+        {
+          "name": "资源与副作用",
+          "required": true
+        },
+        {
+          "name": "取消入口",
+          "required": true
+        }
+      ],
+      "tags": [
+        "明确取消和清理语义",
+        "标出可取消的等待、已开始的阻塞工作和不可撤销提交"
+      ],
+      "sourceIds": [
+        "debug"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "systematic-debugging"
+      ],
+      "ideas": [
+        "先复现并收集证据，再检验根因假设"
+      ],
+      "exampleInput": {
+        "任务流程": "前端发起导出→队列→阻塞压缩→上传临时文件→发布下载链接",
+        "资源与副作用": "CPU任务、临时目录与对象存储上传；发布链接后已有外部可见副作用",
+        "取消入口": "用户可取消；压缩库不支持中断；完成与取消可能同时发生"
+      },
+      "acceptance": [
+        "明确产出：取消状态机、清理责任、未知结果处理和测试",
+        "保持边界：不声称取消异步句柄会停止所有底层工作",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-cache-invalidation",
+      "category": "coding",
+      "title": "设计缓存与失效",
+      "purpose": "定义键、作用域和生命周期",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：设计缓存与失效。\n\n输入：\n缓存对象：{{缓存对象}}\n更新入口：{{更新入口}}\n一致性要求：{{一致性要求}}\n\n做法：定义键、作用域和生命周期；沿所有写入口安排失效；比较主动失效、版本与TTL。\n输出：缓存策略、失效表、失败与隔离用例。\n边界：不得跨用户复用私有结果；TTL不等于一致性保证。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n区分单机与多实例，检查失效失败和并发覆写窗口。",
+      "variables": [
+        {
+          "name": "缓存对象",
+          "required": true
+        },
+        {
+          "name": "更新入口",
+          "required": true
+        },
+        {
+          "name": "一致性要求",
+          "required": true
+        }
+      ],
+      "tags": [
+        "设计缓存与失效",
+        "定义键、作用域和生命周期"
+      ],
+      "sourceIds": [
+        "architecture"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "将业务目标、系统边界和风险纳入方案"
+      ],
+      "exampleInput": {
+        "缓存对象": "个人资料缓存，key=profile:{uid}；前端内存与Redis，两个API实例",
+        "更新入口": "保存资料、管理员修改、批量导入都会写数据库",
+        "一致性要求": "用户写后应读到新值；统计缓存允许一分钟延迟"
+      },
+      "acceptance": [
+        "明确产出：缓存策略、失效表、失败与隔离用例",
+        "保持边界：不得跨用户复用私有结果；TTL不等于一致性保证",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-incident-triage",
+      "category": "coding",
+      "title": "整理故障排查顺序",
+      "purpose": "先区分影响范围与恢复目标",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：整理故障排查顺序。\n\n输入：\n症状与时间线：{{症状与时间线}}\n可用观测：{{可用观测}}\n操作限制：{{操作限制}}\n\n做法：先区分影响范围与恢复目标；从只读检查开始，按信息增益安排实验；记录每步停止条件。\n输出：排查清单、预期观察、分支与升级条件。\n边界：不先杀未知进程或删除锁文件。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n破坏性恢复前确认影响并保留现场，标明止血与回退决策点。",
+      "variables": [
+        {
+          "name": "症状与时间线",
+          "required": true
+        },
+        {
+          "name": "可用观测",
+          "required": true
+        },
+        {
+          "name": "操作限制",
+          "required": true
+        }
+      ],
+      "tags": [
+        "整理故障排查顺序",
+        "先区分影响范围与恢复目标"
+      ],
+      "sourceIds": [
+        "debug"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "systematic-debugging"
+      ],
+      "ideas": [
+        "先复现并收集证据，再检验根因假设"
+      ],
+      "exampleInput": {
+        "症状与时间线": "09:10发布后新进程启动失败，提示EADDRINUSE；旧服务似乎仍响应",
+        "可用观测": "可读取启动日志、监听端口和进程路径；未确认占用进程归属",
+        "操作限制": "只能先做只读检查；不能杀未知进程、清理业务文件"
+      },
+      "acceptance": [
+        "明确产出：排查清单、预期观察、分支与升级条件",
+        "保持边界：不先杀未知进程或删除锁文件",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-dependency-upgrade",
+      "category": "coding",
+      "title": "评估依赖升级",
+      "purpose": "核对官方迁移说明、engine和peer兼容",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：评估依赖升级。\n\n输入：\n当前与目标版本：{{当前与目标版本}}\n使用API：{{使用API}}\n构建目标：{{构建目标}}\n\n做法：核对官方迁移说明、engine和peer兼容；找受影响接口；分开升级与业务重构。\n输出：兼容矩阵、最小改动、验证与回退方案。\n边界：资料未提供时标明待核实，不编造版本变更。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。",
+      "variables": [
+        {
+          "name": "当前与目标版本",
+          "required": true
+        },
+        {
+          "name": "使用API",
+          "required": true
+        },
+        {
+          "name": "构建目标",
+          "required": true
+        }
+      ],
+      "tags": [
+        "评估依赖升级",
+        "核对官方迁移说明、engine和peer兼容"
+      ],
+      "sourceIds": [
+        "verify"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "verification-before-completion"
+      ],
+      "ideas": [
+        "将完成声明绑定到实际验证结果"
+      ],
+      "exampleInput": {
+        "当前与目标版本": "Svelte项目；组件库版本A→B；本次材料未包含官方changelog和peer依赖",
+        "使用API": "使用主题token、Dialog、Select；代码有自定义焦点恢复逻辑",
+        "构建目标": "Windows与Linux构建；不得同时升级整个依赖树"
+      },
+      "acceptance": [
+        "明确产出：兼容矩阵、最小改动、验证与回退方案",
+        "保持边界：资料未提供时标明待核实，不编造版本变更",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-coverage-matrix",
+      "category": "coding",
+      "title": "选择有效测试范围",
+      "purpose": "将每个风险映射到能观察它的检查",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：选择有效测试范围。\n\n输入：\n改动范围：{{改动范围}}\n风险与契约：{{风险与契约}}\n现有测试入口：{{现有测试入口}}\n\n做法：将每个风险映射到能观察它的检查；分开mock、真实集成和生产冒烟；列未覆盖风险。\n输出：风险—检查映射、执行顺序、覆盖边界。\n边界：不要为数量重复运行同一种检查。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n高风险变化对应真实路径验证；mock只证明其模拟范围。",
+      "variables": [
+        {
+          "name": "改动范围",
+          "required": true
+        },
+        {
+          "name": "风险与契约",
+          "required": true
+        },
+        {
+          "name": "现有测试入口",
+          "required": true
+        }
+      ],
+      "tags": [
+        "选择有效测试范围",
+        "将每个风险映射到能观察它的检查"
+      ],
+      "sourceIds": [
+        "verify"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "verification-before-completion"
+      ],
+      "ideas": [
+        "将完成声明绑定到实际验证结果"
+      ],
+      "exampleInput": {
+        "改动范围": "前端隐藏无权限按钮，后端新增对象级授权，改变GET /records/:id行为",
+        "风险与契约": "风险是越权读取、错误隐藏正常入口、缓存跨用户泄漏",
+        "现有测试入口": "已有组件测试、API集成测试和隔离测试账号；生产冒烟待安排"
+      },
+      "acceptance": [
+        "明确产出：风险—检查映射、执行顺序、覆盖边界",
+        "保持边界：不要为数量重复运行同一种检查",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-save-conflict",
+      "category": "coding",
+      "title": "保护编辑与提交",
+      "purpose": "推演保存中继续编辑、失败重试、部分成功和结果未知",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：保护编辑与提交。\n\n输入：\n表单状态：{{表单状态}}\n保存接口：{{保存接口}}\n冲突要求：{{冲突要求}}\n\n做法：推演保存中继续编辑、失败重试、部分成功和结果未知；定义草稿与已提交值的更新规则。\n输出：状态转换、冲突反馈、重试与用例。\n边界：不得用提交时旧快照覆盖用户的新输入。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n同时考虑服务端版本冲突、切页与关闭时的草稿保护。",
+      "variables": [
+        {
+          "name": "表单状态",
+          "required": true
+        },
+        {
+          "name": "保存接口",
+          "required": true
+        },
+        {
+          "name": "冲突要求",
+          "required": true
+        }
+      ],
+      "tags": [
+        "保护编辑与提交",
+        "推演保存中继续编辑、失败重试、部分成功和结果未知"
+      ],
+      "sourceIds": [
+        "verify"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "verification-before-completion"
+      ],
+      "ideas": [
+        "将完成声明绑定到实际验证结果"
+      ],
+      "exampleInput": {
+        "表单状态": "已确认基线A，本地草稿B；A的保存请求正在进行，用户仍可输入",
+        "保存接口": "PUT /profile返回完整对象及version；支持If-Match；失败可能是409或超时",
+        "冲突要求": "不能用A响应覆盖B；离开页面要提示未保存内容"
+      },
+      "acceptance": [
+        "明确产出：状态转换、冲突反馈、重试与用例",
+        "保持边界：不得用提交时旧快照覆盖用户的新输入",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-coding-release-evidence",
+      "category": "coding",
+      "title": "核对交付证据",
+      "purpose": "逐项匹配需求与证据",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：核对交付证据。\n\n输入：\n需求清单：{{需求清单}}\n实际改动：{{实际改动}}\n检查原始结果：{{检查原始结果}}\n\n做法：逐项匹配需求与证据；识别静态通过但运行未验证的部分；检查失败后复跑范围。\n输出：通过、失败、受阻、未执行与剩余风险。\n边界：不把计划、代理自述或旧日志当本次运行结果。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n核对结果对应代码版本与改动时间；版本不明的旧日志不能证明当前通过。",
+      "variables": [
+        {
+          "name": "需求清单",
+          "required": true
+        },
+        {
+          "name": "实际改动",
+          "required": true
+        },
+        {
+          "name": "检查原始结果",
+          "required": true
+        }
+      ],
+      "tags": [
+        "核对交付证据",
+        "逐项匹配需求与证据"
+      ],
+      "sourceIds": [
+        "verify"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "verification-before-completion"
+      ],
+      "ideas": [
+        "将完成声明绑定到实际验证结果"
+      ],
+      "exampleInput": {
+        "需求清单": "需求：真实登录接通；桌面端打包交付",
+        "实际改动": "修改了API路由和登录页；尚未更新桌面打包配置",
+        "检查原始结果": "最后代码修改为10:00；单测日志为09:30；真实登录和打包均未执行"
+      },
+      "acceptance": [
+        "明确产出：通过、失败、受阻、未执行与剩余风险",
+        "保持边界：不把计划、代理自述或旧日志当本次运行结果",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-product-clarify-requirements",
+      "category": "product",
+      "title": "把想法变成可验收需求",
+      "purpose": "先还原用户任务",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：把想法变成可验收需求。\n\n输入：\n想法与背景：{{想法与背景}}\n目标用户：{{目标用户}}\n已知约束：{{已知约束}}\n\n做法：先还原用户任务；区分已确定要求与假设；只提会改变方案的重要问题。\n输出：任务场景、需求、非目标、验收例和关键问题。\n边界：不要替用户决定预算、平台和业务规则。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。",
+      "variables": [
+        {
+          "name": "想法与背景",
+          "required": true
+        },
+        {
+          "name": "目标用户",
+          "required": true
+        },
+        {
+          "name": "已知约束",
+          "required": true
+        }
+      ],
+      "tags": [
+        "把想法变成可验收需求",
+        "先还原用户任务"
+      ],
+      "sourceIds": [
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "确认读者与目标，迭代结构，再做读者检验"
+      ],
+      "exampleInput": {
+        "想法与背景": "团队常把指令散落在聊天记录；想按任务快速查找并插入",
+        "目标用户": "5名内部开发者，每天重复使用调试和写文档指令",
+        "已知约束": "首版本地使用；不要云同步；模型渠道沿用DSH"
+      },
+      "acceptance": [
+        "明确产出：任务场景、需求、非目标、验收例和关键问题",
+        "保持边界：不要替用户决定预算、平台和业务规则",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-product-prd",
+      "category": "product",
+      "title": "编写简洁PRD",
+      "purpose": "按问题、用户流程、行为、状态和验收组织",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：编写简洁PRD。\n\n输入：\n需求与资料：{{需求与资料}}\n受众与目标：{{受众与目标}}\n资源限制：{{资源限制}}\n\n做法：按问题、用户流程、行为、状态和验收组织；标出依赖和待决策项。\n输出：可交给开发的PRD，附成功指标与异常场景。\n边界：只写当前范围，不用愿景和术语凑篇幅。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n缺失业务规则与指标口径列为待定，不代编数值与流程。",
+      "variables": [
+        {
+          "name": "需求与资料",
+          "required": true
+        },
+        {
+          "name": "受众与目标",
+          "required": true
+        },
+        {
+          "name": "资源限制",
+          "required": true
+        }
+      ],
+      "tags": [
+        "编写简洁PRD",
+        "按问题、用户流程、行为、状态和验收组织"
+      ],
+      "sourceIds": [
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "确认读者与目标，迭代结构，再做读者检验"
+      ],
+      "exampleInput": {
+        "需求与资料": "用户从提示词库选任务，填变量，预览并插入当前会话；支持收藏",
+        "受众与目标": "受众为内部开发团队；目标是减少查找和重复输入",
+        "资源限制": "两周交付；无需团队共享；暂未定义节省时间的测量口径"
+      },
+      "acceptance": [
+        "明确产出：可交给开发的PRD，附成功指标与异常场景",
+        "保持边界：只写当前范围，不用愿景和术语凑篇幅",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-product-mvp-cut",
+      "category": "product",
+      "title": "裁剪首版范围",
+      "purpose": "按完成核心任务的必要性比较功能",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：裁剪首版范围。\n\n输入：\n候选功能：{{候选功能}}\n核心目标：{{核心目标}}\n时间与资源：{{时间与资源}}\n\n做法：按完成核心任务的必要性比较功能；指出依赖和可逆的延后项。\n输出：首版清单、延后清单、理由与验收闭环。\n边界：不把高风险依赖隐藏到后续阶段。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n明确延后事项对当前数据结构、接口与后续返工的影响。",
+      "variables": [
+        {
+          "name": "候选功能",
+          "required": true
+        },
+        {
+          "name": "核心目标",
+          "required": true
+        },
+        {
+          "name": "时间与资源",
+          "required": true
+        }
+      ],
+      "tags": [
+        "裁剪首版范围",
+        "按完成核心任务的必要性比较功能"
+      ],
+      "sourceIds": [
+        "project"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "明确交付物、依赖、负责人和时间约束"
+      ],
+      "exampleInput": {
+        "候选功能": "候选：分类搜索、变量预览、插入、收藏、云同步、团队权限、模型推荐",
+        "核心目标": "首版必须完成找到任务→填输入→安全插入的闭环",
+        "时间与资源": "两周、一名前端；后端暂不可用；云同步可延后"
+      },
+      "acceptance": [
+        "明确产出：首版清单、延后清单、理由与验收闭环",
+        "保持边界：不把高风险依赖隐藏到后续阶段",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-product-user-interview",
+      "category": "product",
+      "title": "设计用户访谈",
+      "purpose": "用实际过去行为检验假设",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：设计用户访谈。\n\n输入：\n研究问题：{{研究问题}}\n受访者：{{受访者}}\n已知假设：{{已知假设}}\n\n做法：用实际过去行为检验假设；避免诱导式提问；设计追问与记录口径。\n输出：访谈提纲、追问、证据记录和判断标准。\n边界：不能用访谈意见直接当市场规模结论。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n给证据记录表模板，不把计划访谈写成已获得用户证据。",
+      "variables": [
+        {
+          "name": "研究问题",
+          "required": true
+        },
+        {
+          "name": "受访者",
+          "required": true
+        },
+        {
+          "name": "已知假设",
+          "required": true
+        }
+      ],
+      "tags": [
+        "设计用户访谈",
+        "用实际过去行为检验假设"
+      ],
+      "sourceIds": [
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "确认读者与目标，迭代结构，再做读者检验"
+      ],
+      "exampleInput": {
+        "研究问题": "想验证开发者找不到旧指令、难以适配模板两个假设",
+        "受访者": "6名内部开发者；30分钟半结构化访谈",
+        "已知假设": "已知他们常用浏览器书签；尚无实际使用频次记录"
+      },
+      "acceptance": [
+        "明确产出：访谈提纲、追问、证据记录和判断标准",
+        "保持边界：不能用访谈意见直接当市场规模结论",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-product-project-plan",
+      "category": "product",
+      "title": "制定可执行项目计划",
+      "purpose": "从验收倒推任务",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：制定可执行项目计划。\n\n输入：\n交付目标：{{交付目标}}\n依赖与资源：{{依赖与资源}}\n截止限制：{{截止限制}}\n\n做法：从验收倒推任务；标出关键路径、并行前提与责任空缺；留出集成验证。\n输出：工作分解、里程碑、依赖、风险和待分配责任。\n边界：未指定负责人或日期就标待定，不虚构。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。",
+      "variables": [
+        {
+          "name": "交付目标",
+          "required": true
+        },
+        {
+          "name": "依赖与资源",
+          "required": true
+        },
+        {
+          "name": "截止限制",
+          "required": true
+        }
+      ],
+      "tags": [
+        "制定可执行项目计划",
+        "从验收倒推任务"
+      ],
+      "sourceIds": [
+        "project"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "明确交付物、依赖、负责人和时间约束"
+      ],
+      "exampleInput": {
+        "交付目标": "上线本地提示词库：可搜索、填变量和插入；通过键盘与草稿保护验收",
+        "依赖与资源": "一名前端；设计资料已有；宿主接口第二周才确认",
+        "截止限制": "总期3周；具体日期与任务负责人尚未分配"
+      },
+      "acceptance": [
+        "明确产出：工作分解、里程碑、依赖、风险和待分配责任",
+        "保持边界：未指定负责人或日期就标待定，不虚构",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-product-risk-register",
+      "category": "product",
+      "title": "建立项目风险清单",
+      "purpose": "区分风险与已发生问题",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：建立项目风险清单。\n\n输入：\n方案与背景：{{方案与背景}}\n资源及依赖：{{资源及依赖}}\n风险容忍度：{{风险容忍度}}\n\n做法：区分风险与已发生问题；按影响与可发现性排序；为高风险安排验证动作。\n输出：风险、触发信号、缓解措施、责任和停止条件。\n边界：不以模糊概率数字制造精确感。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n按影响、定性可能性和可发现性排序；责任人未指定则标待定。",
+      "variables": [
+        {
+          "name": "方案与背景",
+          "required": true
+        },
+        {
+          "name": "资源及依赖",
+          "required": true
+        },
+        {
+          "name": "风险容忍度",
+          "required": true
+        }
+      ],
+      "tags": [
+        "建立项目风险清单",
+        "区分风险与已发生问题"
+      ],
+      "sourceIds": [
+        "project"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "明确交付物、依赖、负责人和时间约束"
+      ],
+      "exampleInput": {
+        "方案与背景": "插件依赖宿主输入框接口与第三方模型目录；目前只验证过静态注册",
+        "资源及依赖": "一名开发者，CI可运行；真实账号测试尚未安排",
+        "风险容忍度": "误覆盖草稿不可接受；模型目录暂时失败可提示重试"
+      },
+      "acceptance": [
+        "明确产出：风险、触发信号、缓解措施、责任和停止条件",
+        "保持边界：不以模糊概率数字制造精确感",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-product-acceptance",
+      "category": "product",
+      "title": "把需求改成验收用例",
+      "purpose": "从用户可观察结果写正常、异常和边界场景",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：把需求改成验收用例。\n\n输入：\n需求与流程：{{需求与流程}}\n业务规则：{{业务规则}}\n运行环境：{{运行环境}}\n\n做法：从用户可观察结果写正常、异常和边界场景；核对前提和可重复数据。\n输出：场景、操作、预期结果、优先级与待澄清项。\n边界：不将无法观察的实现细节写成用户验收。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n明确前置状态和可观察输入输出，不凭实现名称定义通过。",
+      "variables": [
+        {
+          "name": "需求与流程",
+          "required": true
+        },
+        {
+          "name": "业务规则",
+          "required": true
+        },
+        {
+          "name": "运行环境",
+          "required": true
+        }
+      ],
+      "tags": [
+        "把需求改成验收用例",
+        "从用户可观察结果写正常、异常和边界场景"
+      ],
+      "sourceIds": [
+        "verify"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "verification-before-completion"
+      ],
+      "ideas": [
+        "将完成声明绑定到实际验证结果"
+      ],
+      "exampleInput": {
+        "需求与流程": "点击优化→生成期间切换会话→返回原会话；结果保留预览，不自动写入",
+        "业务规则": "只有目标会话和草稿版本都未变化时允许应用；不自动发送",
+        "运行环境": "桌面Windows，DSH Web界面；测试模型支持分段输出与取消"
+      },
+      "acceptance": [
+        "明确产出：场景、操作、预期结果、优先级与待澄清项",
+        "保持边界：不将无法观察的实现细节写成用户验收",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-product-vendor-review",
+      "category": "product",
+      "title": "评审工具采购提案",
+      "purpose": "对照需求检查数据处理、费用、迁移、依赖和可替代性",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：评审工具采购提案。\n\n输入：\n提案内容：{{提案内容}}\n使用场景：{{使用场景}}\n评审约束：{{评审约束}}\n\n做法：对照需求检查数据处理、费用、迁移、依赖和可替代性；把证据与宣传分开。\n输出：关键缺口、风险、供应商问题和试用验收。\n边界：没有材料支持的价格和能力写未核实。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n无材料证明的价格、合规和能力标未核实；给出试用准入条件。",
+      "variables": [
+        {
+          "name": "提案内容",
+          "required": true
+        },
+        {
+          "name": "使用场景",
+          "required": true
+        },
+        {
+          "name": "评审约束",
+          "required": true
+        }
+      ],
+      "tags": [
+        "评审工具采购提案",
+        "对照需求检查数据处理、费用、迁移、依赖和可替代性"
+      ],
+      "sourceIds": [
+        "claims"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "把论断、证据和反证分开审查"
+      ],
+      "exampleInput": {
+        "提案内容": "A支持细粒度权限但只能导出PDF；B支持Markdown导出但未说明审计日志",
+        "使用场景": "20人团队管理内部方案文档，迁移后需保留原文和附件",
+        "评审约束": "权限与可导出为硬条件；价格及合规证明均未提供"
+      },
+      "acceptance": [
+        "明确产出：关键缺口、风险、供应商问题和试用验收",
+        "保持边界：没有材料支持的价格和能力写未核实",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-analysis-research-brief",
+      "category": "analysis",
+      "title": "制定资料研究方案",
+      "purpose": "拆出可证实的问题",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：制定资料研究方案。\n\n输入：\n研究问题：{{研究问题}}\n已有材料：{{已有材料}}\n决策用途：{{决策用途}}\n\n做法：拆出可证实的问题；安排一手来源与反例；给停止搜集的条件。\n输出：检索方向、来源优先级、提取表和判断标准。\n边界：不要先预设结论再寻找支持。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。",
+      "variables": [
+        {
+          "name": "研究问题",
+          "required": true
+        },
+        {
+          "name": "已有材料",
+          "required": true
+        },
+        {
+          "name": "决策用途",
+          "required": true
+        }
+      ],
+      "tags": [
+        "制定资料研究方案",
+        "拆出可证实的问题"
+      ],
+      "sourceIds": [
+        "claims"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "把论断、证据和反证分开审查"
+      ],
+      "exampleInput": {
+        "研究问题": "判断本地代码图谱是否适合多语言团队仓库",
+        "已有材料": "已有工具README、仓库语言统计；没有检索基准",
+        "决策用途": "两天形成选型建议；必须覆盖语言支持、增量更新和离线条件"
+      },
+      "acceptance": [
+        "明确产出：检索方向、来源优先级、提取表和判断标准",
+        "保持边界：不要先预设结论再寻找支持",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-analysis-document-compare",
+      "category": "analysis",
+      "title": "比较多份资料",
+      "purpose": "仅在指定维度建立逐项对应",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：比较多份资料。\n\n输入：\n资料内容：{{资料内容}}\n比较维度：{{比较维度}}\n决策目标：{{决策目标}}\n\n做法：仅在指定维度建立逐项对应；每个差异标来源；区分冲突、缺失和口径不同。\n输出：对比表、冲突与缺口、可支持的结论。\n边界：未写明的内容标原文未说明，不补写。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。",
+      "variables": [
+        {
+          "name": "资料内容",
+          "required": true
+        },
+        {
+          "name": "比较维度",
+          "required": true
+        },
+        {
+          "name": "决策目标",
+          "required": true
+        }
+      ],
+      "tags": [
+        "比较多份资料",
+        "仅在指定维度建立逐项对应"
+      ],
+      "sourceIds": [
+        "claims"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "把论断、证据和反证分开审查"
+      ],
+      "exampleInput": {
+        "资料内容": "A：单机本地索引，离线查询，更新需手动；B：远端托管，自动更新，未写数据保留时间",
+        "比较维度": "部署方式、数据离开设备的范围、维护成本",
+        "决策目标": "为内部代码检索选型，禁止上传私有源码"
+      },
+      "acceptance": [
+        "明确产出：对比表、冲突与缺口、可支持的结论",
+        "保持边界：未写明的内容标原文未说明，不补写",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-analysis-claim-check",
+      "category": "analysis",
+      "title": "核查论断与证据",
+      "purpose": "拆开事实和推论",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：核查论断与证据。\n\n输入：\n论断及材料：{{论断及材料}}\n可用来源：{{可用来源}}\n核查范围：{{核查范围}}\n\n做法：拆开事实和推论；寻找来源、日期、适用条件与反证；评估结论是否超出证据。\n输出：论断、证据、限制、可信程度及待核实项。\n边界：不能编造引用；无法联网时不宣称已外部核查。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n按充分支持、部分支持、证据不足或存在反证表达支持度。",
+      "variables": [
+        {
+          "name": "论断及材料",
+          "required": true
+        },
+        {
+          "name": "可用来源",
+          "required": true
+        },
+        {
+          "name": "核查范围",
+          "required": true
+        }
+      ],
+      "tags": [
+        "核查论断与证据",
+        "拆开事实和推论"
+      ],
+      "sourceIds": [
+        "claims"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "把论断、证据和反证分开审查"
+      ],
+      "exampleInput": {
+        "论断及材料": "报告称流程节省80%时间；证据只有一次5分钟任务与一个1分钟演示",
+        "可用来源": "只有这份报告；无法联网，也没有对照组原始记录",
+        "核查范围": "只判断当前证据支持度，列出复测所需信息"
+      },
+      "acceptance": [
+        "明确产出：论断、证据、限制、可信程度及待核实项",
+        "保持边界：不能编造引用；无法联网时不宣称已外部核查",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-analysis-paper-review",
+      "category": "analysis",
+      "title": "阅读并评审研究论文",
+      "purpose": "还原问题、方法、基线和实验条件",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：阅读并评审研究论文。\n\n输入：\n论文内容：{{论文内容}}\n关注问题：{{关注问题}}\n背景限制：{{背景限制}}\n\n做法：还原问题、方法、基线和实验条件；检查结论是否由结果支持；提出复现关注点。\n输出：贡献、证据、局限、与任务相关性和复现清单。\n边界：不要把摘要宣传当实验事实。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n只提供摘要时，对未附实验与基线标无法核验。",
+      "variables": [
+        {
+          "name": "论文内容",
+          "required": true
+        },
+        {
+          "name": "关注问题",
+          "required": true
+        },
+        {
+          "name": "背景限制",
+          "required": true
+        }
+      ],
+      "tags": [
+        "阅读并评审研究论文",
+        "还原问题、方法、基线和实验条件"
+      ],
+      "sourceIds": [
+        "claims"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "把论断、证据和反证分开审查"
+      ],
+      "exampleInput": {
+        "论文内容": "论文摘录：对20道调试题加入结构化输入，正确率由50%到65%；未给置信区间，基线提示词缺正文",
+        "关注问题": "是否足以支持在团队正式采用该模板",
+        "背景限制": "仅提供摘要与结果表，没有模型版本、完整方法和题目数据"
+      },
+      "acceptance": [
+        "明确产出：贡献、证据、局限、与任务相关性和复现清单",
+        "保持边界：不要把摘要宣传当实验事实",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-analysis-dataset-audit",
+      "category": "analysis",
+      "title": "审查数据质量",
+      "purpose": "检查缺失、重复、单位、时间和选择偏差",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：审查数据质量。\n\n输入：\n数据样例与字段：{{数据样例与字段}}\n分析目标：{{分析目标}}\n采集口径：{{采集口径}}\n\n做法：检查缺失、重复、单位、时间和选择偏差；指出哪些分析会因此失效。\n输出：问题表、修复顺序、校验规则和剩余限制。\n边界：不无依据删除异常值，不推断样本代表总体。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n区分样例可见问题与需全量统计的问题；缺全量数据时给校验方法。",
+      "variables": [
+        {
+          "name": "数据样例与字段",
+          "required": true
+        },
+        {
+          "name": "分析目标",
+          "required": true
+        },
+        {
+          "name": "采集口径",
+          "required": true
+        }
+      ],
+      "tags": [
+        "审查数据质量",
+        "检查缺失、重复、单位、时间和选择偏差"
+      ],
+      "sourceIds": [
+        "verify"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "verification-before-completion"
+      ],
+      "ideas": [
+        "将完成声明绑定到实际验证结果"
+      ],
+      "exampleInput": {
+        "数据样例与字段": "CSV样例：date,user_id,tokens\n2026-10-01,u1,100\n2026/10/01,u1,100\n2026-10-02,,20",
+        "分析目标": "用于按天统计独立用户与token总量",
+        "采集口径": "渠道A用UTC、渠道B用UTC+8；只有样例，没有全量统计"
+      },
+      "acceptance": [
+        "明确产出：问题表、修复顺序、校验规则和剩余限制",
+        "保持边界：不无依据删除异常值，不推断样本代表总体",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-analysis-metrics",
+      "category": "analysis",
+      "title": "解释指标变化",
+      "purpose": "核对分母、采样、分组与季节性",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：解释指标变化。\n\n输入：\n指标与时间范围：{{指标与时间范围}}\n对照数据：{{对照数据}}\n业务背景：{{业务背景}}\n\n做法：核对分母、采样、分组与季节性；区分相关与因果；提出可检验解释。\n输出：变化分解、证据、候选解释和后续实验。\n边界：不从汇总均值直接推断每个用户体验改善。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n核查采集口径变化和异常流量；候选解释明确标为待检验。",
+      "variables": [
+        {
+          "name": "指标与时间范围",
+          "required": true
+        },
+        {
+          "name": "对照数据",
+          "required": true
+        },
+        {
+          "name": "业务背景",
+          "required": true
+        }
+      ],
+      "tags": [
+        "解释指标变化",
+        "核对分母、采样、分组与季节性"
+      ],
+      "sourceIds": [
+        "claims"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "把论断、证据和反证分开审查"
+      ],
+      "exampleInput": {
+        "指标与时间范围": "近14天对比前14天：转化率12%→15%，新增用户10000→7000；转化定义未变",
+        "对照数据": "按渠道拆分数据暂缺；本期减少了低意向投放",
+        "业务背景": "想判断产品改版是否改善转化；同期投放与版本都发生变化"
+      },
+      "acceptance": [
+        "明确产出：变化分解、证据、候选解释和后续实验",
+        "保持边界：不从汇总均值直接推断每个用户体验改善",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-analysis-decision-memo",
+      "category": "analysis",
+      "title": "撰写决策备忘录",
+      "purpose": "对齐必须满足条件",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：撰写决策备忘录。\n\n输入：\n候选方案：{{候选方案}}\n证据与约束：{{证据与约束}}\n决策标准：{{决策标准}}\n\n做法：对齐必须满足条件；按相同维度比较；解释关键取舍与改变结论的条件。\n输出：建议、证据表、代价、未决项和可逆试点。\n边界：信息不足时给条件性建议，不装作唯一正确。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。",
+      "variables": [
+        {
+          "name": "候选方案",
+          "required": true
+        },
+        {
+          "name": "证据与约束",
+          "required": true
+        },
+        {
+          "name": "决策标准",
+          "required": true
+        }
+      ],
+      "tags": [
+        "撰写决策备忘录",
+        "对齐必须满足条件"
+      ],
+      "sourceIds": [
+        "claims"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "把论断、证据和反证分开审查"
+      ],
+      "exampleInput": {
+        "候选方案": "A：本地模型，设备需扩容，敏感文档不离设备；B：云API，当前可用但需脱敏",
+        "证据与约束": "无同任务准确率对照；云费用只有估计，设备报价未提供",
+        "决策标准": "优先保护敏感数据，其次是任务质量与可维护性"
+      },
+      "acceptance": [
+        "明确产出：建议、证据表、代价、未决项和可逆试点",
+        "保持边界：信息不足时给条件性建议，不装作唯一正确",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-analysis-source-synthesis",
+      "category": "analysis",
+      "title": "综合多来源结论",
+      "purpose": "按主题合并共同点与分歧",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：综合多来源结论。\n\n输入：\n来源材料：{{来源材料}}\n研究问题：{{研究问题}}\n目标读者：{{目标读者}}\n\n做法：按主题合并共同点与分歧；追溯每个重要结论；指出来源之间是否独立。\n输出：主题结论、出处、矛盾与证据空白。\n边界：同一原始消息的转载不算多个独立证据。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n仅凭出处和显式引用判断来源独立性；元数据缺失时标独立性未知。",
+      "variables": [
+        {
+          "name": "来源材料",
+          "required": true
+        },
+        {
+          "name": "研究问题",
+          "required": true
+        },
+        {
+          "name": "目标读者",
+          "required": true
+        }
+      ],
+      "tags": [
+        "综合多来源结论",
+        "按主题合并共同点与分歧"
+      ],
+      "sourceIds": [
+        "claims"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "把论断、证据和反证分开审查"
+      ],
+      "exampleInput": {
+        "来源材料": "来源A作者实测：离线检索快但初始化慢；来源B转载A结论；来源C官方说明仅称支持离线",
+        "研究问题": "该工具是否适合每天更新的内部文档库",
+        "目标读者": "给技术负责人看；需区分实测、官方声明和转载"
+      },
+      "acceptance": [
+        "明确产出：主题结论、出处、矛盾与证据空白",
+        "保持边界：同一原始消息的转载不算多个独立证据",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-writing-document-outline",
+      "category": "writing",
+      "title": "设计文档结构",
+      "purpose": "先列读者要解决的问题",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：设计文档结构。\n\n输入：\n主题与资料：{{主题与资料}}\n读者与目的：{{读者与目的}}\n篇幅与格式：{{篇幅与格式}}\n\n做法：先列读者要解决的问题；安排信息顺序；标注每节需要的证据。\n输出：提纲、各节目标、素材缺口与精简建议。\n边界：不要先写与决策无关的背景长文。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。",
+      "variables": [
+        {
+          "name": "主题与资料",
+          "required": true
+        },
+        {
+          "name": "读者与目的",
+          "required": true
+        },
+        {
+          "name": "篇幅与格式",
+          "required": true
+        }
+      ],
+      "tags": [
+        "设计文档结构",
+        "先列读者要解决的问题"
+      ],
+      "sourceIds": [
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "确认读者与目标，迭代结构，再做读者检验"
+      ],
+      "exampleInput": {
+        "主题与资料": "项目为pnpm前端＋Rust后端；已有启动命令、环境样例和健康接口说明",
+        "读者与目的": "第一次接手项目的开发者；目的是独立启动并检查服务",
+        "篇幅与格式": "一页快速开始＋排障附录；不解释语言基础"
+      },
+      "acceptance": [
+        "明确产出：提纲、各节目标、素材缺口与精简建议",
+        "保持边界：不要先写与决策无关的背景长文",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-writing-technical-guide",
+      "category": "writing",
+      "title": "编写可复现操作指南",
+      "purpose": "按真实步骤和预期结果写",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：编写可复现操作指南。\n\n输入：\n操作流程：{{操作流程}}\n环境与前置条件：{{环境与前置条件}}\n常见失败：{{常见失败}}\n\n做法：按真实步骤和预期结果写；区分命令、输入、输出与故障处理。\n输出：前提、步骤、验证、排障与恢复方法。\n边界：未确认的命令标待验证，不宣称操作已执行。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n缺少实际环境和命令时标待核实；恢复方法按是否涉及状态修改决定。",
+      "variables": [
+        {
+          "name": "操作流程",
+          "required": true
+        },
+        {
+          "name": "环境与前置条件",
+          "required": true
+        },
+        {
+          "name": "常见失败",
+          "required": true
+        }
+      ],
+      "tags": [
+        "编写可复现操作指南",
+        "按真实步骤和预期结果写"
+      ],
+      "sourceIds": [
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "确认读者与目标，迭代结构，再做读者检验"
+      ],
+      "exampleInput": {
+        "操作流程": "已有草稿：pnpm install→pnpm dev；API使用cargo run；Web访问5173端口",
+        "环境与前置条件": "Windows PowerShell；Node与Rust版本未在资料中明确；首次启动依赖数据库",
+        "常见失败": "pnpm不可用、端口占用、数据库连接失败是已知问题"
+      },
+      "acceptance": [
+        "明确产出：前提、步骤、验证、排障与恢复方法",
+        "保持边界：未确认的命令标待验证，不宣称操作已执行",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-writing-rfc",
+      "category": "writing",
+      "title": "编写技术提案RFC",
+      "purpose": "解释当前问题",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：编写技术提案RFC。\n\n输入：\n问题与证据：{{问题与证据}}\n候选方案：{{候选方案}}\n兼容约束：{{兼容约束}}\n\n做法：解释当前问题；比较选项；明确接口、迁移、验证与未决问题。\n输出：问题、方案、取舍、风险、落地与回退。\n边界：不只写推荐方案而隐藏替代选择。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。",
+      "variables": [
+        {
+          "name": "问题与证据",
+          "required": true
+        },
+        {
+          "name": "候选方案",
+          "required": true
+        },
+        {
+          "name": "兼容约束",
+          "required": true
+        }
+      ],
+      "tags": [
+        "编写技术提案RFC",
+        "解释当前问题"
+      ],
+      "sourceIds": [
+        "architecture"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "将业务目标、系统边界和风险纳入方案"
+      ],
+      "exampleInput": {
+        "问题与证据": "同步导出接口大文件时超时；用户只能重新请求",
+        "候选方案": "A增加超时；B后台任务＋轮询；C后台任务＋推送",
+        "兼容约束": "旧客户端仍调用原接口；不能丢失已启动任务；目标先讨论契约"
+      },
+      "acceptance": [
+        "明确产出：问题、方案、取舍、风险、落地与回退",
+        "保持边界：不只写推荐方案而隐藏替代选择",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-writing-edit-clear",
+      "category": "writing",
+      "title": "精简复杂文档",
+      "purpose": "删除重复与空话",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：精简复杂文档。\n\n输入：\n待修改正文：{{待修改正文}}\n目标读者：{{目标读者}}\n必须保留信息：{{必须保留信息}}\n\n做法：删除重复与空话；用具体动词说明行为；保持事实、限定和必要术语。\n输出：改写正文与简短修改说明。\n边界：不得为简短删除影响结论的条件或风险。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。",
+      "variables": [
+        {
+          "name": "待修改正文",
+          "required": true
+        },
+        {
+          "name": "目标读者",
+          "required": true
+        },
+        {
+          "name": "必须保留信息",
+          "required": true
+        }
+      ],
+      "tags": [
+        "精简复杂文档",
+        "删除重复与空话"
+      ],
+      "sourceIds": [
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "确认读者与目标，迭代结构，再做读者检验"
+      ],
+      "exampleInput": {
+        "待修改正文": "本模块通过多维能力赋能流程提效。用户点击导出后，系统将生成CSV；超过一分钟可去任务页查看进度。",
+        "目标读者": "内部产品使用者，无需了解架构术语",
+        "必须保留信息": "必须保留CSV格式、一分钟提示和任务页入口"
+      },
+      "acceptance": [
+        "明确产出：改写正文与简短修改说明",
+        "保持边界：不得为简短删除影响结论的条件或风险",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "openai-writing-document-summary",
+      "category": "writing",
+      "title": "生成决策摘要",
+      "purpose": "提取关键结论及其证据",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：生成决策摘要。\n\n输入：\n文档内容：{{文档内容}}\n目标受众：{{目标受众}}\n关注问题：{{关注问题}}\n\n做法：提取关键结论及其证据；把已确定事实与分析区分；保留风险和行动项。\n输出：简短摘要、关键事实、决策与未说明内容。\n边界：不虚构负责人、日期和数字。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。",
+      "variables": [
+        {
+          "name": "文档内容",
+          "required": true
+        },
+        {
+          "name": "目标受众",
+          "required": true
+        },
+        {
+          "name": "关注问题",
+          "required": true
+        }
+      ],
+      "tags": [
+        "生成决策摘要",
+        "提取关键结论及其证据"
+      ],
+      "sourceIds": [
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译；沿用旧条目ID以兼容收藏，来源标签以本条元数据为准。"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "确认读者与目标，迭代结构，再做读者检验"
+      ],
+      "exampleInput": {
+        "文档内容": "季度摘录：完成搜索和收藏；调用接口仍偶发超时；下季度是否做同步待负责人决定。未写预算。",
+        "目标受众": "项目负责人，希望快速决定下季度范围",
+        "关注问题": "关注已交付、风险与待决定事项；不需要技术实现细节"
+      },
+      "acceptance": [
+        "明确产出：简短摘要、关键事实、决策与未说明内容",
+        "保持边界：不虚构负责人、日期和数字",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-writing-reader-test",
+      "category": "writing",
+      "title": "检验文档是否自洽",
+      "purpose": "以首次阅读者角度尝试完成任务",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：检验文档是否自洽。\n\n输入：\n文档正文：{{文档正文}}\n读者背景：{{读者背景}}\n使用任务：{{使用任务}}\n\n做法：以首次阅读者角度尝试完成任务；找未定义术语、跳步和前后矛盾。\n输出：问题位置、无法理解的原因、最小补充与复检清单。\n边界：不能声称真实新读者测试已完成。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n区分正文跳步与未随材料附上的外部引用。",
+      "variables": [
+        {
+          "name": "文档正文",
+          "required": true
+        },
+        {
+          "name": "读者背景",
+          "required": true
+        },
+        {
+          "name": "使用任务",
+          "required": true
+        }
+      ],
+      "tags": [
+        "检验文档是否自洽",
+        "以首次阅读者角度尝试完成任务"
+      ],
+      "sourceIds": [
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "确认读者与目标，迭代结构，再做读者检验"
+      ],
+      "exampleInput": {
+        "文档正文": "安装说明：运行pnpm dev后打开页面。首次运行前请先准备好上面提到的数据库。本文未提供数据库地址。",
+        "读者背景": "会用终端，但不了解该项目的首次接手开发者",
+        "使用任务": "只凭本文完成首次启动；外部环境手册链接尚未附上"
+      },
+      "acceptance": [
+        "明确产出：问题位置、无法理解的原因、最小补充与复检清单",
+        "保持边界：不能声称真实新读者测试已完成",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-writing-release-notes",
+      "category": "writing",
+      "title": "编写准确更新说明",
+      "purpose": "把代码变化转成用户行为变化",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：编写准确更新说明。\n\n输入：\n实际变更：{{实际变更}}\n面向用户：{{面向用户}}\n已知限制：{{已知限制}}\n\n做法：把代码变化转成用户行为变化；按影响组织；核对升级和兼容提醒。\n输出：更新说明、必要升级步骤与已知限制。\n边界：没有验证的能力不能写成新增功能。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。",
+      "variables": [
+        {
+          "name": "实际变更",
+          "required": true
+        },
+        {
+          "name": "面向用户",
+          "required": true
+        },
+        {
+          "name": "已知限制",
+          "required": true
+        }
+      ],
+      "tags": [
+        "编写准确更新说明",
+        "把代码变化转成用户行为变化"
+      ],
+      "sourceIds": [
+        "verify"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "verification-before-completion"
+      ],
+      "ideas": [
+        "将完成声明绑定到实际验证结果"
+      ],
+      "exampleInput": {
+        "实际变更": "已验证：新增独立提示词页面，搜索可跨分类；单测与构建已通过",
+        "面向用户": "内部工具用户，只关心入口变化和使用方式",
+        "已知限制": "真实模型调用未验证；云同步未实现；旧收藏应继续保留"
+      },
+      "acceptance": [
+        "明确产出：更新说明、必要升级步骤与已知限制",
+        "保持边界：没有验证的能力不能写成新增功能",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-writing-localization",
+      "category": "writing",
+      "title": "检查翻译与术语",
+      "purpose": "比较语义、条件、否定、变量和格式",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：检查翻译与术语。\n\n输入：\n原文与译文：{{原文与译文}}\n术语表：{{术语表}}\n使用场景：{{使用场景}}\n\n做法：比较语义、条件、否定、变量和格式；按严重性指出偏差；保持占位符不变。\n输出：问题对照、修订译文和术语建议。\n边界：不把改写当忠实翻译，不翻译代码标识。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n可使表达自然，但不改原意、条件、否定与变量；缺术语表时列待统一译名。",
+      "variables": [
+        {
+          "name": "原文与译文",
+          "required": true
+        },
+        {
+          "name": "术语表",
+          "required": true
+        },
+        {
+          "name": "使用场景",
+          "required": true
+        }
+      ],
+      "tags": [
+        "检查翻译与术语",
+        "比较语义、条件、否定、变量和格式"
+      ],
+      "sourceIds": [
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "确认读者与目标，迭代结构，再做读者检验"
+      ],
+      "exampleInput": {
+        "原文与译文": "原文：Do not overwrite {{draft}}.\n译文：请覆盖{{draft}}。",
+        "术语表": "draft统一译为草稿；变量名不翻译",
+        "使用场景": "提示词正文，需要保留否定条件和占位符"
+      },
+      "acceptance": [
+        "明确产出：问题对照、修订译文和术语建议",
+        "保持边界：不把改写当忠实翻译，不翻译代码标识",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-general-meeting-actions",
+      "category": "general",
+      "title": "会议记录转行动项",
+      "purpose": "区分决定、建议、待定与行动",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：会议记录转行动项。\n\n输入：\n会议记录：{{会议记录}}\n汇报对象：{{汇报对象}}\n输出要求：{{输出要求}}\n\n做法：区分决定、建议、待定与行动；合并重复；保留责任和截止时间的原始依据。\n输出：决定、行动表、待确认项与原文线索。\n边界：记录没写的负责人和日期标待确认。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n同一议题以最终共识为准，未收敛则标待确认；格式服从用户输出要求。",
+      "variables": [
+        {
+          "name": "会议记录",
+          "required": true
+        },
+        {
+          "name": "汇报对象",
+          "required": true
+        },
+        {
+          "name": "输出要求",
+          "required": true
+        }
+      ],
+      "tags": [
+        "会议记录转行动项",
+        "区分决定、建议、待定与行动"
+      ],
+      "sourceIds": [
+        "project"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "明确交付物、依赖、负责人和时间约束"
+      ],
+      "exampleInput": {
+        "会议记录": "甲：周五上线。乙：接口未好，建议下周。甲：同意，先等接口确认；小李整理测试清单。",
+        "汇报对象": "项目团队，需要跟进阻塞与行动",
+        "输出要求": "行动表包含事项、负责人、期限；没确定的写待确认"
+      },
+      "acceptance": [
+        "明确产出：决定、行动表、待确认项与原文线索",
+        "保持边界：记录没写的负责人和日期标待确认",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-general-weekly-update",
+      "category": "general",
+      "title": "整理有用的工作汇报",
+      "purpose": "按目标而非流水账归纳",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：整理有用的工作汇报。\n\n输入：\n完成与进展：{{完成与进展}}\n阻碍与风险：{{阻碍与风险}}\n受众与周期：{{受众与周期}}\n\n做法：按目标而非流水账归纳；突出需要支持的决定；区分已完成与预计。\n输出：简洁汇报、下一步、风险与需决策项。\n边界：不能把计划写成已交付成果。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n未给目标时按任务主题归纳，不自行拔高目标。",
+      "variables": [
+        {
+          "name": "完成与进展",
+          "required": true
+        },
+        {
+          "name": "阻碍与风险",
+          "required": true
+        },
+        {
+          "name": "受众与周期",
+          "required": true
+        }
+      ],
+      "tags": [
+        "整理有用的工作汇报",
+        "按目标而非流水账归纳"
+      ],
+      "sourceIds": [
+        "project"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "明确交付物、依赖、负责人和时间约束"
+      ],
+      "exampleInput": {
+        "完成与进展": "本周目标为形成原型闭环；已完成搜索与插入，真实模型调用尚未验证",
+        "阻碍与风险": "模型目录接口仍未确认，需宿主团队提供契约",
+        "受众与周期": "汇报给技术负责人，周期为本周；重点是需支持的决定"
+      },
+      "acceptance": [
+        "明确产出：简洁汇报、下一步、风险与需决策项",
+        "保持边界：不能把计划写成已交付成果",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-general-professional-email",
+      "category": "general",
+      "title": "组织清楚的工作邮件",
+      "purpose": "把对方需要知道和采取的行动放前面",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：组织清楚的工作邮件。\n\n输入：\n沟通目的与事实：{{沟通目的与事实}}\n收件人：{{收件人}}\n语气与限制：{{语气与限制}}\n\n做法：把对方需要知道和采取的行动放前面；保留必要背景；说明回应方式。\n输出：主题、邮件草稿与缺失信息。\n边界：只起草，不代发，不编造承诺和截止时间。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n缺少人名、期限或附件名称时使用[待填:名称]，只输出草稿。",
+      "variables": [
+        {
+          "name": "沟通目的与事实",
+          "required": true
+        },
+        {
+          "name": "收件人",
+          "required": true
+        },
+        {
+          "name": "语气与限制",
+          "required": true
+        }
+      ],
+      "tags": [
+        "组织清楚的工作邮件",
+        "把对方需要知道和采取的行动放前面"
+      ],
+      "sourceIds": [
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "确认读者与目标，迭代结构，再做读者检验"
+      ],
+      "exampleInput": {
+        "沟通目的与事实": "请求接口团队确认优化请求的取消语义；目前不能确定断连是否取消上游调用",
+        "收件人": "接口负责人王工；与对方已有协作关系",
+        "语气与限制": "简短、明确问题及阻塞；回复期限未确定，不替对方承诺"
+      },
+      "acceptance": [
+        "明确产出：主题、邮件草稿与缺失信息",
+        "保持边界：只起草，不代发，不编造承诺和截止时间",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-general-learning-plan",
+      "category": "general",
+      "title": "设计可检验的学习计划",
+      "purpose": "拆解必需能力",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：设计可检验的学习计划。\n\n输入：\n学习目标：{{学习目标}}\n当前基础：{{当前基础}}\n时间与资源：{{时间与资源}}\n\n做法：拆解必需能力；安排练习与反馈；定义可演示结果和复盘点。\n输出：阶段计划、练习、验收标准与调整条件。\n边界：不以阅读时长代替能力证明。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n练习设计可用通用学科方法，不虚构用户基础、工具与时间。",
+      "variables": [
+        {
+          "name": "学习目标",
+          "required": true
+        },
+        {
+          "name": "当前基础",
+          "required": true
+        },
+        {
+          "name": "时间与资源",
+          "required": true
+        }
+      ],
+      "tags": [
+        "设计可检验的学习计划",
+        "拆解必需能力"
+      ],
+      "sourceIds": [
+        "verify"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "verification-before-completion"
+      ],
+      "ideas": [
+        "将完成声明绑定到实际验证结果"
+      ],
+      "exampleInput": {
+        "学习目标": "两周内能独立用断点和日志定位Node.js HTTP接口中的异步错误",
+        "当前基础": "会JavaScript基础与命令行；没用过调试器",
+        "时间与资源": "每天45分钟，本地有Node与编辑器；以能复现和解释一个错误验收"
+      },
+      "acceptance": [
+        "明确产出：阶段计划、练习、验收标准与调整条件",
+        "保持边界：不以阅读时长代替能力证明",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-general-explain-concept",
+      "category": "general",
+      "title": "用实例解释复杂概念",
+      "purpose": "先给准确的直观解释",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：用实例解释复杂概念。\n\n输入：\n概念或材料：{{概念或材料}}\n读者基础：{{读者基础}}\n实际用途：{{实际用途}}\n\n做法：先给准确的直观解释；用小例子展示；说明类比失效边界并给检查题。\n输出：解释、实例、常见误解与理解检查。\n边界：不牺牲准确性换取简单，不强加无关长篇背景。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n理解检查附判定要点；可用领域知识解释，不捏造材料事实。",
+      "variables": [
+        {
+          "name": "概念或材料",
+          "required": true
+        },
+        {
+          "name": "读者基础",
+          "required": true
+        },
+        {
+          "name": "实际用途",
+          "required": true
+        }
+      ],
+      "tags": [
+        "用实例解释复杂概念",
+        "先给准确的直观解释"
+      ],
+      "sourceIds": [
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "确认读者与目标，迭代结构，再做读者检验"
+      ],
+      "exampleInput": {
+        "概念或材料": "幂等性与请求重试的关系",
+        "读者基础": "有两年前端经验，不熟悉后端事务",
+        "实际用途": "用于设计创建订单接口的客户端重试策略"
+      },
+      "acceptance": [
+        "明确产出：解释、实例、常见误解与理解检查",
+        "保持边界：不牺牲准确性换取简单，不强加无关长篇背景",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-general-work-priorities",
+      "category": "general",
+      "title": "安排下一步工作",
+      "purpose": "先识别阻塞核心交付的事项",
+      "kind": "template",
+      "language": "zh",
+      "body": "任务：安排下一步工作。\n\n输入：\n任务与现状：{{任务与现状}}\n目标与期限：{{目标与期限}}\n资源与依赖：{{资源与依赖}}\n\n做法：先识别阻塞核心交付的事项；区分紧急、重要和可延后；给下一项可执行动作。\n输出：优先级、理由、依赖和下一步。\n边界：不虚构工时与人员可用性。需求与环境事实不补造，重要缺口单列；建议和假设说明依据与待验证条件。\n资源与期限冲突时列出必须裁剪或请求决策的事项。",
+      "variables": [
+        {
+          "name": "任务与现状",
+          "required": true
+        },
+        {
+          "name": "目标与期限",
+          "required": true
+        },
+        {
+          "name": "资源与依赖",
+          "required": true
+        }
+      ],
+      "tags": [
+        "安排下一步工作",
+        "先识别阻塞核心交付的事项"
+      ],
+      "sourceIds": [
+        "project"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "参考方法后独立编写；非官方原文或忠实翻译"
+      },
+      "skillIds": [],
+      "ideas": [
+        "明确交付物、依赖、负责人和时间约束"
+      ],
+      "exampleInput": {
+        "任务与现状": "内容48/60条，界面初稿可用，模型接口取消行为未验证；无接口联调无法完成优化功能",
+        "目标与期限": "本周形成一个可验收的搜索→优化→应用闭环",
+        "资源与依赖": "一名开发者；宿主团队周三可提供接口协助"
+      },
+      "acceptance": [
+        "明确产出：优先级、理由、依赖和下一步",
+        "保持边界：不虚构工时与人员可用性",
+        "事实、假设与待验证项分开，不声称未执行的结果"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-design-arch-option-tradeoff",
+      "category": "design",
+      "title": "架构方案取舍与ADR生成",
+      "purpose": "在多方案并存且受限于成本、性能或人力约束时，对比可行方案并输出可追溯的轻量ADR决策记录。",
+      "kind": "template",
+      "language": "zh",
+      "body": "针对{{业务目标与阶段}}，在{{硬性约束与规模}}条件下，评估{{候选方案与现状}}并输出架构取舍报告。\n\n执行要求：\n1. 先核对目标与约束之间是否存在冲突或关键信息缺口；若有缺口，列出需补充项并标注假设条件，不擅自替用户做隐含业务决定。\n2. 比较有依据的可行方案及“沿用现状或最小改动”基线；不足两种时说明原因，不编造选项，围绕复杂度、改造成本、性能/可靠性风险、团队维护成本和可逆性给出横向对比表。\n3. 信息足以支持决策时给出推荐方案，否则给条件性结论、放弃其余方案的直接理由、不适用边界与回滚/演进触发条件，最终整理为精简ADR（背景、决策、后果、待验证假设）。\n\n边界：禁止用空泛形容词代替量化或可观察依据；未经压测或实测的数据必须标注为“待验证估算”。",
+      "variables": [
+        {
+          "name": "业务目标与阶段",
+          "required": true
+        },
+        {
+          "name": "硬性约束与规模",
+          "required": true
+        },
+        {
+          "name": "候选方案与现状",
+          "required": true
+        }
+      ],
+      "tags": [
+        "架构方案取舍与ADR生成",
+        "业务目标与阶段",
+        "硬性约束与规模",
+        "候选方案与现状"
+      ],
+      "sourceIds": [
+        "architecture",
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "Gemini 4 Argon High 整理，主代理交叉审校与精修；参考来源由主代理获取核对，非官方原文"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "先校验约束与缺口，再并行对比多方案与最小基线，避免锁定首个直觉方案",
+        "将业务目标、边界与风险纳入决策结构，并剔除夸大思考时长要求"
+      ],
+      "exampleInput": {
+        "业务目标与阶段": "SaaS工单系统处于MVP向多租户演进阶段，下季度需支持企业客户数据隔离与独立导出",
+        "硬性约束与规模": "2名全栈开发，6周交付，当前日活3000、单库PostgreSQL 40GB，预算不允许拆出多套物理集群",
+        "候选方案与现状": "现状为单库共享表无tenant_id索引；候选A：共享库+强制tenant_id+RLS；候选B：按大客户拆Schema；候选C：直接拆独立数据库"
+      },
+      "acceptance": [
+        "包含有依据的方案与基线对比，不足两种说明原因，维度涵盖改造成本、风险与可逆性",
+        "明确列出信息缺口或前提假设，未把估算数值写成已实测结果",
+        "输出包含推荐结论、放弃理由及回滚/演进触发条件"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-design-api-contract-design",
+      "category": "design",
+      "title": "API契约与错误语义设计",
+      "purpose": "围绕前后端或服务间协作场景，一次性明确端点、字段约束、幂等分页与结构化错误码，减少联调返工。",
+      "kind": "template",
+      "language": "zh",
+      "body": "为{{接口业务场景}}设计前后端或服务间API契约，结合{{调用方与数据上下文}}与{{协议与兼容约束}}输出可执行规格。\n\n输出结构：\n1. 契约总览：接口路径/方法、鉴权方式、幂等性策略及适用调用方。\n2. 请求与响应模型：字段名、类型、必填/可选、枚举值、默认值（无默认则注明）、边界校验规则及适用的分页/排序约定；若存在敏感字段需标明脱敏或禁止下发策略。\n3. 状态码与错误表：列出业务错误码、对应HTTP/RPC状态码、可重试性及前端可提示语义。\n4. 联调边界与Mock样例：给出1组正常与1组异常响应示例，并注明版本兼容或字段弃用规则。\n\n边界：仅设计接口契约与校验规则，不越权虚构底层表结构；若调用方所需字段在上下文中缺失，显式标记为“待确认字段”。",
+      "variables": [
+        {
+          "name": "接口业务场景",
+          "required": true
+        },
+        {
+          "name": "调用方与数据上下文",
+          "required": true
+        },
+        {
+          "name": "协议与兼容约束",
+          "required": true
+        }
+      ],
+      "tags": [
+        "API契约与错误语义设计",
+        "接口业务场景",
+        "调用方与数据上下文",
+        "协议与兼容约束"
+      ],
+      "sourceIds": [
+        "architecture",
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "Gemini 4 Argon High 整理，主代理交叉审校与精修；参考来源由主代理获取核对，非官方原文"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "先对齐调用上下文与协议边界，再落具体输入输出与异常语义",
+        "面向具体协作读者（前后端联调）组织结构化规格并暴露待确认项"
+      ],
+      "exampleInput": {
+        "接口业务场景": "批量导入客户联系人并异步返回校验结果与失败明细下载",
+        "调用方与数据上下文": "Web管理台上传CSV（最多5000行），服务端已有租户上下文，需支持断点轮询任务进度",
+        "协议与兼容约束": "RESTful JSON，遵循现有 /api/v1 前缀与 {code,message,data,requestId} 统一响应包装"
+      },
+      "acceptance": [
+        "每个请求和响应字段均标明类型、必填性、边界校验与默认值",
+        "错误表明确区分错误码、重试策略与调用方处理语义",
+        "对上下文未提供的字段标注“待确认字段”，未自行捏造业务数据"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-design-data-model-design",
+      "category": "design",
+      "title": "数据模型与演进约束设计",
+      "purpose": "从核心读写模式和一致性需求出发设计表结构、索引与迁移边界，避免只看静态实体而忽略查询与变更风险。",
+      "kind": "template",
+      "language": "zh",
+      "body": "基于{{业务实体与关系}}、{{核心读写与查询模式}}以及{{存储引擎与存量约束}}，输出面向工程落地的数据模型设计。\n\n输出要求：\n1. 模型与关系说明：列出核心表/集合、主键策略、关联关系、状态字段枚举及唯一性约束。\n2. 索引与查询映射：按执行计划和数据分布评估高频查询，比较索引、分区或不增加索引的取舍，并指出可能退化为全表扫描的高风险查询。\n3. 一致性与生命周期：说明软删/归档、并发更新保护（如乐观锁或事务边界）及审计字段。\n4. 迁移与回滚要点：针对存量数据给出低风险变更顺序（如先加可空列、双写或回填）及回滚前提。\n\n边界：不为未提供的未来需求提前过度分库分表；若读写QPS或数据增长量未给出，须标注“容量假设待补充”。",
+      "variables": [
+        {
+          "name": "业务实体与关系",
+          "required": true
+        },
+        {
+          "name": "核心读写与查询模式",
+          "required": true
+        },
+        {
+          "name": "存储引擎与存量约束",
+          "required": true
+        }
+      ],
+      "tags": [
+        "数据模型与演进约束设计",
+        "业务实体与关系",
+        "核心读写与查询模式",
+        "存储引擎与存量约束"
+      ],
+      "sourceIds": [
+        "architecture",
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "Gemini 4 Argon High 整理，主代理交叉审校与精修；参考来源由主代理获取核对，非官方原文"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "将数据流、读写路径与迁移风险作为建模前置条件",
+        "遵循YAGNI原则，不针对未证实的远期规模做过度抽象"
+      ],
+      "exampleInput": {
+        "业务实体与关系": "用户、订阅计划、账单发票、发票明细；一个用户可多次升降级，每期账单对应多条明细",
+        "核心读写与查询模式": "按用户分页查近一年账单（高频）、按账单号精确对账、月底批量生成续费账单",
+        "存储引擎与存量约束": "MySQL 8.0，现有 users 表已有200万行且不能停机锁表超过10秒"
+      },
+      "acceptance": [
+        "对高频读写给出索引收益与代价分析，不要求机械加索引",
+        "明确写出并发控制、生命周期及存量数据迁移顺序",
+        "未对未提及的远期场景做过度拆分，且对缺失容量信息标注假设"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-design-system-boundary-dependency-map",
+      "category": "design",
+      "title": "系统边界与依赖故障图谱",
+      "purpose": "梳理多模块或跨服务系统中的职责边界、数据流向与强弱依赖，提前识别单点故障与级联风险。",
+      "kind": "template",
+      "language": "zh",
+      "body": "根据{{系统参与方与模块}}、{{核心数据流与同步链路}}和{{可靠性与安全边界}}，梳理系统边界与依赖关系。\n\n输出要求：\n1. 边界划分表：明确各模块及外部系统的职责输入、输出、数据所有权和禁止越界行为。\n2. 文本依赖图：用简洁Mermaid或缩进层级标出调用方向、同步/异步方式及关键数据流向，不虚构未提到的中间件。\n3. 依赖分级与故障隔离：区分强依赖与弱依赖，列出超时、重试、降级兜底及潜在循环依赖或单点瓶颈。\n4. 变更影响面：指出任一上游契约或外部接口异常时的受影响链路。\n\n边界：只基于已提供模块做结构化梳理；不了解内部实现的第三方服务统一标为“外部黑盒依赖”，不得臆测其SLA。",
+      "variables": [
+        {
+          "name": "系统参与方与模块",
+          "required": true
+        },
+        {
+          "name": "核心数据流与同步链路",
+          "required": true
+        },
+        {
+          "name": "可靠性与安全边界",
+          "required": true
+        }
+      ],
+      "tags": [
+        "系统边界与依赖故障图谱",
+        "系统参与方与模块",
+        "核心数据流与同步链路",
+        "可靠性与安全边界"
+      ],
+      "sourceIds": [
+        "architecture",
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "Gemini 4 Argon High 整理，主代理交叉审校与精修；参考来源由主代理获取核对，非官方原文"
+      },
+      "skillIds": [
+        "doc-coauthoring"
+      ],
+      "ideas": [
+        "突出系统边界、组件间数据流与故障传播路径",
+        "用表格与轻量结构图同步上下文，降低跨团队理解偏差"
+      ],
+      "exampleInput": {
+        "系统参与方与模块": "Web前端、BFF网关、订单服务、库存服务、支付网关（第三方）、消息队列",
+        "核心数据流与同步链路": "下单时BFF调订单服务，订单同步预占库存并向支付网关发起预授权；支付回调通过MQ异步通知订单改状态",
+        "可靠性与安全边界": "支付回调需防重放且允许延迟5分钟最终一致；库存不足需立即阻塞下单，不能超卖"
+      },
+      "acceptance": [
+        "清晰区分每个模块的职责边界与数据所有权",
+        "依赖关系明确标注同步/异步属性及强弱依赖降级策略",
+        "未虚构未提供的中间件，外部系统未臆测SLA"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-design-task-flow-info-architecture",
+      "category": "design",
+      "title": "用户任务流与信息架构规划",
+      "purpose": "在画界面之前先理顺用户核心任务路径、页面层级、状态跳转与空错分支，避免边写UI边补逻辑。",
+      "kind": "template",
+      "language": "zh",
+      "body": "围绕{{核心用户与任务目标}}，结合{{现有产品导航与入口}}与{{业务规则与前置条件}}，规划任务流与信息架构（IA），暂不进入具体视觉样式设计。\n\n输出要求：\n1. 核心任务流：拆解主路径及关键分支（权限不足、前置未完成、中断恢复、空状态），标出每步触发动作、系统反馈与退出路径。\n2. 信息架构树：给出页面/视图层级、导航归属、适用时的URL或导航语义及各视图的核心信息优先级（主信息/辅助信息/隐藏操作）。\n3. 认知负荷检查：指出可合并的冗余步骤、容易迷路的状态跳转及需要前置提示的破坏性操作。\n\n边界：严格先结构与状态、后视觉；禁止输出颜色、圆角、卡片排版等视觉装饰指令。",
+      "variables": [
+        {
+          "name": "核心用户与任务目标",
+          "required": true
+        },
+        {
+          "name": "现有产品导航与入口",
+          "required": true
+        },
+        {
+          "name": "业务规则与前置条件",
+          "required": true
+        }
+      ],
+      "tags": [
+        "用户任务流与信息架构规划",
+        "核心用户与任务目标",
+        "现有产品导航与入口",
+        "业务规则与前置条件"
+      ],
+      "sourceIds": [
+        "frontend",
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "Gemini 4 Argon High 整理，主代理交叉审校与精修；参考来源由主代理获取核对，非官方原文"
+      },
+      "skillIds": [
+        "frontend-design"
+      ],
+      "ideas": [
+        "先确立产品任务语境与信息层级，再谈表层视觉表达",
+        "从用户导航定位与清晰的区域结构出发设计页面层级"
+      ],
+      "exampleInput": {
+        "核心用户与任务目标": "运营人员在后台配置定时优惠券活动，并需支持审核提交、撤回与查看发放效果",
+        "现有产品导航与入口": "左侧一级导航含：概览、商品、营销中心、订单、设置；营销中心下已有“满减活动”列表页",
+        "业务规则与前置条件": "优惠券预算超过1万元需财务二次审批；已生效活动不可直接改面额，只能提前终止"
+      },
+      "acceptance": [
+        "任务流覆盖主路径以及权限、中断、空状态等关键异常分支",
+        "信息架构明确页面归属、层级及单视图的信息优先级",
+        "全程聚焦流程与结构，未混入颜色、圆角、卡片等视觉风格要求"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-design-ui-design-brief",
+      "category": "design",
+      "title": "界面设计简报（Design Brief）",
+      "purpose": "将产品上下文、已有设计系统、页面目标与视觉方向收敛成可执行简报，防止生成同质化模板界面。",
+      "kind": "template",
+      "language": "zh",
+      "body": "基于{{页面任务与用户场景}}、{{已有设计系统或技术栈}}和{{布局与动效约束}}，撰写一份可直接指导开发的界面设计简报。\n\n输出要求：\n1. 场景与目标对齐：明确主用户在该页的最高频任务、首屏必须立即回答的问题及页面成功标准。\n2. 信息层级与区域骨架：定义主视觉焦点、次级操作区与辅助信息区，优先复用{{已有设计系统或技术栈}}中的有效规范或Token；确需调整时说明依据和影响。\n3. 视觉方向与克制原则：用可操作的设计语言描述排版节奏、对比度与空间留白方向；动效优先用于状态反馈；其他动效须说明目的并尊重减少动态效果设置。\n4. 状态清单：列出加载、空数据、错误与权限受限时的界面占位策略。\n\n边界：不硬性规定固定色值、圆角像素或卡片样式；若用户未提供品牌或设计系统，给出与任务匹配的建议并标注假设；只有影响方案的重要缺口才需确认。",
+      "variables": [
+        {
+          "name": "页面任务与用户场景",
+          "required": true
+        },
+        {
+          "name": "已有设计系统或技术栈",
+          "required": true
+        },
+        {
+          "name": "布局与动效约束",
+          "required": true
+        }
+      ],
+      "tags": [
+        "界面设计简报（Design Brief）",
+        "页面任务与用户场景",
+        "已有设计系统或技术栈",
+        "布局与动效约束"
+      ],
+      "sourceIds": [
+        "frontend",
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "Gemini 4 Argon High 整理，主代理交叉审校与精修；参考来源由主代理获取核对，非官方原文"
+      },
+      "skillIds": [
+        "frontend-design"
+      ],
+      "ideas": [
+        "以产品语境、强信息层级和克制非用户触发动效替代千篇一律模板",
+        "通过明确目标、素材与读者校验生成结构化简报",
+        "缺失设计系统前提时先给方向对比确认，而非武断拍板"
+      ],
+      "exampleInput": {
+        "页面任务与用户场景": "开发者控制台的API密钥管理页，支持新建密钥、查看最近调用失败告警和吊销旧密钥",
+        "已有设计系统或技术栈": "React + Tailwind，项目已有中性灰阶与语义Token，风格偏高信息密度工具型后台",
+        "布局与动效约束": "需兼容1280px以上桌面及768px平板侧边栏折叠，尊重系统减弱动效偏好"
+      },
+      "acceptance": [
+        "明确优先复用已有设计系统，而非强行套用固定圆角、色值或卡片模板",
+        "视觉描述聚焦信息层级、排版节奏与克制的用户触发动效",
+        "包含首屏核心任务、多状态清单及未知设计系统时的分支确认机制"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-design-existing-page-ux-audit",
+      "category": "design",
+      "title": "现有页面UX诊断与改造清单",
+      "purpose": "针对已上线或已有稿件的页面，从任务完成阻力、状态盲区与文案清晰度定位体验问题并排序落地。",
+      "kind": "template",
+      "language": "zh",
+      "body": "对照{{页面功能与目标用户}}，审查{{页面现状描述或结构}}及{{已知用户反馈或指标}}，输出可落地的UX问题诊断与优化方案。\n\n审查维度：\n1. 任务效率与路径阻力：识别多余跳转、隐藏关键入口、重复录入与缺少默认值的步骤。\n2. 信息层级与可读性：检查视觉焦点是否分散、同级操作是否过多、专业术语或报错文案是否难以采取下一步行动。\n3. 状态与防错缺口：核查加载、空态、错误恢复及不可逆操作的二次确认是否缺失。\n4. 改造优先级表：按“问题现象—影响任务—最小改动建议—预期收益/代价”列出P0/P1/P2清单。\n\n边界：仅基于提供的页面现状下结论，未观察到真实交互录屏或埋点数据时明确标为“逻辑推断”；优先给出低成本高回报改动，不轻易建议整页推倒重做。",
+      "variables": [
+        {
+          "name": "页面功能与目标用户",
+          "required": true
+        },
+        {
+          "name": "页面现状描述或结构",
+          "required": true
+        },
+        {
+          "name": "已知用户反馈或指标",
+          "required": true
+        }
+      ],
+      "tags": [
+        "现有页面UX诊断与改造清单",
+        "页面功能与目标用户",
+        "页面现状描述或结构",
+        "已知用户反馈或指标"
+      ],
+      "sourceIds": [
+        "frontend",
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "Gemini 4 Argon High 整理，主代理交叉审校与精修；参考来源由主代理获取核对，非官方原文"
+      },
+      "skillIds": [
+        "frontend-design"
+      ],
+      "ideas": [
+        "先诊断信息层级与任务聚焦问题，再给出低破坏性调整",
+        "重视防错提示、明确动作标签与操作后果区分"
+      ],
+      "exampleInput": {
+        "页面功能与目标用户": "B端财务人员在结算单详情页核对费用并点击“确认开票”",
+        "页面现状描述或结构": "顶部12个字段平铺，中间明细表格默认只显示5行需横向滚动，“确认开票”和“作废”按钮紧挨在右下角且样式相近",
+        "已知用户反馈或指标": "客服收到多起误点作废反馈，新财务常找不到异常扣款原因"
+      },
+      "acceptance": [
+        "每条问题均绑定具体的任务阻力或防错缺口，而非主观审美评价",
+        "输出含P0/P1/P2优先级与最小改动建议的落地清单",
+        "严格区分事实依据与逻辑推断，未捏造未提供的埋点结论"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-design-design-token-component-spec",
+      "category": "design",
+      "title": "设计Token与组件状态规范",
+      "purpose": "为现有或新建组件库定义语义化Token命名、变体API及全交互状态契约，统一设计与代码实现。",
+      "kind": "template",
+      "language": "zh",
+      "body": "结合{{已有样式体系与平台}}与{{主题与扩展要求}}，为{{目标组件与使用场景}}制定设计Token映射与组件规范。\n\n输出要求：\n1. 语义Token分层：区分基础色板/字号与语义Token（如背景、边框、主交互、禁用、危险语义），优先映射并复用已有Token体系，不强加预设风格。\n2. 组件Props与插槽契约：定义尺寸、变体、受控/非受控属性、必填可访问属性及扩展插槽边界。\n3. 完整状态矩阵：逐一说明 组件实际需要的 default、hover、active、focus-visible、disabled、loading、error 的视觉/行为变化与过渡原则。\n4. 使用禁用清单：给出2-3条误用反例（如语义混用或嵌套冲突）。\n\n边界：只定义语义层与规范契约，不硬性指定特定圆角或品牌色值；若原有Token命名未知，使用占位映射并标明待对齐项。",
+      "variables": [
+        {
+          "name": "已有样式体系与平台",
+          "required": true
+        },
+        {
+          "name": "目标组件与使用场景",
+          "required": true
+        },
+        {
+          "name": "主题与扩展要求",
+          "required": true
+        }
+      ],
+      "tags": [
+        "设计Token与组件状态规范",
+        "已有样式体系与平台",
+        "目标组件与使用场景",
+        "主题与扩展要求"
+      ],
+      "sourceIds": [
+        "frontend",
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "Gemini 4 Argon High 整理，主代理交叉审校与精修；参考来源由主代理获取核对，非官方原文"
+      },
+      "skillIds": [
+        "frontend-design"
+      ],
+      "ideas": [
+        "先锚定已有设计系统与语义一致性，避免孤立造轮子",
+        "将focus-visible与禁用/错误状态作为组件一等公民契约"
+      ],
+      "exampleInput": {
+        "已有样式体系与平台": "Web端Vue 3组件库，采用CSS Variables，已有 --color-bg-* 与 --space-* 命名习惯",
+        "目标组件与使用场景": "通用操作按钮（Button）与异步确认弹窗（ConfirmDialog），用于后台高频表单与表格操作",
+        "主题与扩展要求": "需支持浅色与深色模式自动切换，保留后续接入高对比度模式的语义扩展位"
+      },
+      "acceptance": [
+        "清晰区分基础Token与语义Token，并声明与已有样式体系的映射关系",
+        "覆盖focus-visible、disabled、loading、error等完整交互状态矩阵",
+        "未强行硬编码圆角或颜色模板，且包含组件误用边界"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-design-form-state-feedback-spec",
+      "category": "design",
+      "title": "表单校验状态与反馈设计",
+      "purpose": "系统设计复杂表单的校验时机、异步提交态、错误定位与无障碍播报规则，消除提交焦虑和静默失败。",
+      "kind": "template",
+      "language": "zh",
+      "body": "针对{{表单业务字段与规则}}、{{提交与异步交互方式}}及{{用户容错与保存需求}}，输出表单状态流转与反馈规范。\n\n输出要求：\n1. 校验时机矩阵：区分输入中、失焦（onBlur）、提交时及服务端返回四类触发时机，避免过早打断用户输入。\n2. 控件与全局反馈：规定标签关联、必填/格式提示、字段级内联报错、顶部错误汇总定位与成功反馈方式；确保错误不依赖单一颜色传达。\n3. 异步与防重规则：明确提交中如何防重与反馈，不默认禁用所有输入，并保护保存期间的新编辑、网络超时重试、服务端字段错误回填以及草稿防丢失机制。\n4. 焦点与键盘路径：指明校验失败后焦点落点与屏幕阅读器状态通知策略（如 aria-invalid 与提示关联）。\n\n边界：聚焦交互逻辑、状态与无障碍反馈，不限定特定视觉卡片或输入边框风格。",
+      "variables": [
+        {
+          "name": "表单业务字段与规则",
+          "required": true
+        },
+        {
+          "name": "提交与异步交互方式",
+          "required": true
+        },
+        {
+          "name": "用户容错与保存需求",
+          "required": true
+        }
+      ],
+      "tags": [
+        "表单校验状态与反馈设计",
+        "表单业务字段与规则",
+        "提交与异步交互方式",
+        "用户容错与保存需求"
+      ],
+      "sourceIds": [
+        "frontend",
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "Gemini 4 Argon High 整理，主代理交叉审校与精修；参考来源由主代理获取核对，非官方原文"
+      },
+      "skillIds": [
+        "frontend-design"
+      ],
+      "ideas": [
+        "强调显式label关联、清晰内联错误说明、非单一颜色提示与可感知状态通知",
+        "先梳理交互状态与反馈链路，而非先美化输入框样式"
+      ],
+      "exampleInput": {
+        "表单业务字段与规则": "企业实名认证表单：统一社会信用代码（18位正则+服务端核验）、营业执照上传（<10MB）、对公账号",
+        "提交与异步交互方式": "信用代码需失焦异步查重，最终提交接口耗时约3-8秒",
+        "用户容错与保存需求": "用户经常中途去查找营业执照附件，刷新或切换标签不能轻易丢失已填内容"
+      },
+      "acceptance": [
+        "明确划分onChange、onBlur、onSubmit与服务端校验触发时机",
+        "错误反馈不依赖单一颜色，包含字段关联、汇总定位与焦点落点",
+        "覆盖防重复提交、网络超时重试及草稿/未保存离开保护"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-design-responsive-layout-spec",
+      "category": "design",
+      "title": "响应式布局与断点适配规范",
+      "purpose": "规划页面在不同视口、缩放比例与输入设备下的重排策略、密度取舍与溢出保护，避免简单等比缩放导致操作失效。",
+      "kind": "template",
+      "language": "zh",
+      "body": "根据{{页面内容模块清单}}、{{目标设备与断点范围}}和{{交互与现有框架约束}}，设计响应式布局与多端适配方案。\n\n输出要求：\n1. 断点与栅格策略：定义关键断点及各区间的列数、主副区占比与容器最大宽度策略；优先适配内容重排而非机械套用固定断点。\n2. 模块降级与重排规则：逐模块说明在窄屏下是折叠、抽屉化、堆叠还是转卡片列表，并标明必须保留可见的核心操作，禁止简单隐藏关键功能。\n3. 特殊元素适配：明确宽表格、长文本截断、固定吸底栏及软键盘弹出时的溢出与滚动规则。\n4. 触控与缩放校验：兼容触控点击热区与桌面200%浏览器缩放下的重排；宽表格、画布等必要二维内容允许局部滚动，避免整页横向溢出。\n\n边界：只输出结构重排与适配规则，不强制指定特定色彩、圆角或阴影装饰。",
+      "variables": [
+        {
+          "name": "页面内容模块清单",
+          "required": true
+        },
+        {
+          "name": "目标设备与断点范围",
+          "required": true
+        },
+        {
+          "name": "交互与现有框架约束",
+          "required": true
+        }
+      ],
+      "tags": [
+        "响应式布局与断点适配规范",
+        "页面内容模块清单",
+        "目标设备与断点范围",
+        "交互与现有框架约束"
+      ],
+      "sourceIds": [
+        "frontend",
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "Gemini 4 Argon High 整理，主代理交叉审校与精修；参考来源由主代理获取核对，非官方原文"
+      },
+      "skillIds": [
+        "frontend-design"
+      ],
+      "ideas": [
+        "依据各端核心任务重排信息优先级，而非死板缩放页面",
+        "保证不同视图宽度与缩放下的结构语义和阅读顺序一致"
+      ],
+      "exampleInput": {
+        "页面内容模块清单": "数据看板：顶部筛选条、4个核心指标卡、折线趋势图、底部10列明细数据表及导出按钮",
+        "目标设备与断点范围": "主力1440px桌面端，同时需支持768px平板竖屏与375px移动端应急查看",
+        "交互与现有框架约束": "使用CSS Grid/Flex，移动端主要查指标和筛选日期，导出操作可收纳至次级菜单"
+      },
+      "acceptance": [
+        "每个模块均写明窄屏下的重排或收纳方式，且不粗暴隐藏核心操作",
+        "覆盖宽表格、长文本溢出与200%缩放无整页横向滚动策略",
+        "未附加无关色彩、圆角或固定卡片美学约束"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-design-accessibility-audit",
+      "category": "design",
+      "title": "Web无障碍（A11y）结构审查",
+      "purpose": "针对页面代码或交互设计系统排查键盘可达、语义结构、对比度与动态通知缺陷，给出可直接修改的定位建议。",
+      "kind": "template",
+      "language": "zh",
+      "body": "对照{{目标合规级别或约束}}，审查{{待审代码或交互说明}}及{{组件类型与动态行为}}中的无障碍（A11y）问题并给出修复方案。\n\n审查清单：\n1. 键盘可达与焦点管理：核查Tab顺序、键盘完整操作（Enter/Space/Esc/方向键）、弹窗焦点陷阱与关闭后焦点归位、可见焦点轮廓。\n2. 语义与标签：检查地标区域（header/main/nav）、标题层级跳级、表单label关联及图标按钮的可访问名称。\n3. 动态状态与反馈：检查加载、报错、弹窗和折叠面板是否正确使用 aria-expanded、aria-invalid、aria-live 等语义属性。\n4. 对比度与感官独立：指出仅靠颜色或纯悬停触发的信息盲区。\n\n边界：仅指出基于已提供代码/描述可确认的问题；需真实浏览器、屏幕阅读器或色彩计算实测的项必须标为“待运行时实测”，严禁宣称已通过合规验收。",
+      "variables": [
+        {
+          "name": "待审代码或交互说明",
+          "required": true
+        },
+        {
+          "name": "组件类型与动态行为",
+          "required": true
+        },
+        {
+          "name": "目标合规级别或约束",
+          "required": true
+        }
+      ],
+      "tags": [
+        "Web无障碍（A11y）结构审查",
+        "待审代码或交互说明",
+        "组件类型与动态行为",
+        "目标合规级别或约束"
+      ],
+      "sourceIds": [
+        "a11y",
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "Gemini 4 Argon High 整理，主代理交叉审校与精修；参考来源由主代理获取核对，非官方原文"
+      },
+      "skillIds": [],
+      "ideas": [
+        "以键盘完整操作、语义标签关联、状态及错误可感知通知作为审查主线",
+        "结合工程验收准则：静态代码审查不能替代真实辅助技术运行测试，未运行项须显式隔离标注"
+      ],
+      "exampleInput": {
+        "待审代码或交互说明": "用 <div onClick> 实现的自定义下拉筛选器，选中项仅用浅灰背景高亮，无键盘上下键支持",
+        "组件类型与动态行为": "点击触发浮层展开并异步请求列表，按页面空白处关闭，列表加载时只显示旋转SVG",
+        "目标合规级别或约束": "需满足 WCAG 2.1 AA 基本键盘与读屏可用性，暂保留现有视觉样式不变"
+      },
+      "acceptance": [
+        "覆盖键盘可达、焦点管理、语义标签与动态ARIA状态四项核心维度",
+        "每条问题均附带具体的代码或结构级修复方式",
+        "对未在真实浏览器/读屏器运行验证的项明确标为待实测，不伪造通过结论"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    },
+    {
+      "id": "dsh-design-live-ui-visual-acceptance",
+      "category": "design",
+      "title": "真实页面视觉与状态验收",
+      "purpose": "针对真实构建运行的页面（与Mock/设计稿严格区分），按视口、状态与交互路径执行客观视觉及渲染验收。",
+      "kind": "template",
+      "language": "zh",
+      "body": "依据{{预期设计基线与验收范围}}，对{{验收对象与运行环境}}结合{{已采集实证（截图或DOM状态）}}执行真实页面视觉与交互验收。\n\n验收规则：\n1. 环境隔离声明：首先明确本次验收基于真实后端/构建还是Mock数据；凡依赖Mock的链路，可验收布局、状态分支及模拟交互，不得代表真实数据闭环通过。\n2. 实证核对维度：逐项比对关键视口排版、字体层级、组件对齐与溢出截断、图片/图标资源加载以及加载/空态/错误态切换表现。\n3. 缺陷分级报告：按“阻塞/严重/轻微”输出问题位置、复现条件与期望表现。\n\n边界：只可基于实际提供的截图、DOM/样式数据或观察日志给出“通过/不通过”；未提供截图或未实际运行测量的视口、动效及浏览器兼容性一律标记为“未验证”，严禁猜测或宣称全面通过。",
+      "variables": [
+        {
+          "name": "验收对象与运行环境",
+          "required": true
+        },
+        {
+          "name": "预期设计基线与验收范围",
+          "required": true
+        },
+        {
+          "name": "已采集实证（截图或DOM状态）",
+          "required": true
+        }
+      ],
+      "tags": [
+        "真实页面视觉与状态验收",
+        "验收对象与运行环境",
+        "预期设计基线与验收范围",
+        "已采集实证（截图或DOM状态）"
+      ],
+      "sourceIds": [
+        "frontend",
+        "docs"
+      ],
+      "provenance": {
+        "kind": "adaptation",
+        "note": "Gemini 4 Argon High 整理，主代理交叉审校与精修；参考来源由主代理获取核对，非官方原文"
+      },
+      "skillIds": [
+        "frontend-design"
+      ],
+      "ideas": [
+        "强调验收结论必须受客观实证与读者核查约束",
+        "结合团队工程红线：严格分离Mock验收与真实页面验收，未实际观测的运行状态绝不宣称通过"
+      ],
+      "exampleInput": {
+        "验收对象与运行环境": "本地构建产物 http://localhost:4173/orders，连接测试环境真实API；已采集1440px与375px两张截图",
+        "预期设计基线与验收范围": "核对订单列表页的表头对齐、状态标签区分度及375px窄屏下筛选与下单按钮可达性",
+        "已采集实证（截图或DOM状态）": "1440px截图正常；375px截图中顶部筛选框右侧被裁切约12px，空态与网络错误态尚未触发截图"
+      },
+      "acceptance": [
+        "报告开头明确区分真实接口运行环境与Mock数据环境的验收边界",
+        "仅对有截图或实测证据支持的条目下结论，缺证视口/状态一律标“未验证”",
+        "缺陷清单包含复现条件、实际观察与预期基线对比"
+      ],
+      "quality": {
+        "review": "editor-reviewed",
+        "modelTest": "not-run"
+      }
+    }
+  ]
+}

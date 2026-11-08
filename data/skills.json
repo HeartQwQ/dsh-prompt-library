@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 2,
+  "skills": [
+    {
+      "id": "systematic-debugging",
+      "name": "系统调试",
+      "sourceId": "debug",
+      "when": "调试复杂或反复出现的问题",
+      "dependencies": "完整工作流需要源码、日志和执行验证的工具",
+      "availability": "推荐参考，未检测安装，不自动调用"
+    },
+    {
+      "id": "verification-before-completion",
+      "name": "完成前验证",
+      "sourceId": "verify",
+      "when": "核对交付声明是否有证据",
+      "dependencies": "需要真实检查结果，提示词不能代替执行",
+      "availability": "推荐参考，未检测安装，不自动调用"
+    },
+    {
+      "id": "doc-coauthoring",
+      "name": "文档协作",
+      "sourceId": "docs",
+      "when": "编写PRD、方案、技术文档",
+      "dependencies": "完整工作流需要多轮沟通，读者检验不能凭空声称完成",
+      "availability": "推荐参考，未检测安装，不自动调用"
+    },
+    {
+      "id": "frontend-design",
+      "name": "前端设计",
+      "sourceId": "frontend",
+      "when": "设计页面与视觉体系",
+      "dependencies": "完整Skill涉及实际界面实现，文本建议不是视觉验收",
+      "availability": "推荐参考，未检测安装，不自动调用"
+    }
+  ]
+}
