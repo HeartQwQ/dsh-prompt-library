@@ -1,6 +1,6 @@
 {
   "name": "dsh-prompt-library",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "type": "module",
   "description": "Curated task prompts, Skill-derived methods and model-configurable prompt optimization for DSH.",
@@ -34,7 +34,8 @@
     "docs/disposition.json",
     "docs/design-review.json",
     "docs/peer-review-resolution.json",
-    "licenses/*"
+    "licenses/*",
+    "docs/UI-RESTORE.md"
   ],
   "scripts": {
     "build": "node build-library.mjs",

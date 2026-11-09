@@ -33,5 +33,5 @@ test('built Client registers independent library, composer shortcut and overlay 
  assert.ok(registrations.some(x=>x.name==='sidebar.panellist'&&x.id==='prompt-library'));
  assert.ok(registrations.some(x=>x.name==='conversation.input.dock'));
  assert.ok(registrations.some(x=>x.name==='shell.overlay'));
- assert.equal(registrations.filter(x=>x.name==='conversation.input.right').length,0);
+ assert.equal(registrations.filter(x=>x.name==='conversation.input.right'&&x.id==='prompt-library-polish').length,1);
 });
